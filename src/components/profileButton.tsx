@@ -1,10 +1,12 @@
-interface NavItemsProps {
-  src: string;   
-  alt: string; 
-  text: string;   
+import React from "react";
+
+interface ProfileButtonProps {
+  src: string;
+  alt: string;
+  text: string;
 }
 
-export default function NavItem({ src, alt, text }: NavItemsProps) {
+export default function ProfileButton({ src, alt, text }: ProfileButtonProps) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
       <img src={src} alt={alt} style={{ width: "40px", height: "40px" }} />
