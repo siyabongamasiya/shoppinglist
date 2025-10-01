@@ -25,6 +25,7 @@ export default function InputField({
           padding: "0.5rem",
           borderRadius: "6px",
           border: "1px solid #ccc",
+          backgroundColor:"rgba(0, 0, 0, 0.1)",
           fontSize: "1rem",
         }}
       />

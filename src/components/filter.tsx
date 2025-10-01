@@ -1,15 +1,15 @@
 import React, { useState } from "react";
+import "../App.css";
+
 
 interface FilterBarProps {
   onFilterChange(newValue: string): void;
   categories: string[];
-  category: string;
 }
 
 const FilterBar = ({
   onFilterChange,
   categories,
-  category,
 }: FilterBarProps) => {
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -18,7 +18,7 @@ const FilterBar = ({
 
   return (
     <div id="filter-container">
-      <select value={category} onChange={handleCategoryChange}>
+      <select value={"value"} onChange={handleCategoryChange}>
         {categories.map((cat) => (
           <option key={cat} value={cat}>
             {cat}

@@ -1,16 +1,23 @@
-import React from 'react'
+import React from "react";
+import { FaPlus } from "react-icons/fa";
 
 interface ButtonProps {
-    text : string,
-    onClick : () => void,
-    hasIcon? : boolean,
-    style : React.CSSProperties
+  text: string;
+  onClick: () => void;
+  icon?: React.ReactNode;
+  style: React.CSSProperties;
 }
 
-export default function Button({text, onClick, hasIcon = false,style} : ButtonProps) {
+export default function Button({ text, onClick, icon, style }: ButtonProps) {
   return (
-    <div>
-      <button>{text}</button>
+    <div id="button-container" >
+      {icon}
+      <button
+        onClick={onClick}
+        style={style}
+      >
+        {text}
+      </button>
     </div>
-  )
+  );
 }
