@@ -18,6 +18,7 @@
 
 .button--default {
   background: #111827;
+  border-radius: 6px;
   color: #fff;
 }
 .button--default:hover { background: #0f1629; }

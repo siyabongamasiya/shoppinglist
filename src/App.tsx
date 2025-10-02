@@ -1,5 +1,7 @@
 import { User } from "./models/models";
 import { HomePage } from "./pages/HomePage";
+import { LoginPage } from "./pages/LoginPage";
+import { ProfilePage } from "./pages/ProfilePage";
 
 export default function App() {
   const user = new User(
@@ -11,7 +13,7 @@ export default function App() {
   );
   return (
     <div style={{ padding: 16 }}>
-      <HomePage
+      {/* <HomePage
         user={user}
         shoppingLists={[]}
         onLogout={() => {}}
@@ -24,7 +26,16 @@ export default function App() {
         setSearchQuery={() => {}}
         sortBy="date"
         setSortBy={() => {}}
-      />
+      /> */}
+
+      {/* <ProfilePage
+        user={user}
+        onUpdateUser={() => {}}
+        onNavigateToHome={() => {}}
+        onLogout={() => {}}
+      /> */}
+
+      <LoginPage onLogin={() => {}} onNavigateToRegister={() => {}} />
     </div>
   );
 }

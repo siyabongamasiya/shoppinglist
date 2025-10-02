@@ -5,8 +5,7 @@ import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-
-import { cn } from "./utils";
+import "../styles/components/carousel.css";
 import { Button } from "./button";
 
 type CarouselApi = UseEmblaCarouselType[1];
@@ -120,10 +119,11 @@ function Carousel({
     >
       <div
         onKeyDownCapture={handleKeyDown}
-        className={cn("relative", className)}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
+        data-orientation={orientation}
+        className={["carousel", className || ""].filter(Boolean).join(" ")}
         {...props}
       >
         {children}
@@ -138,17 +138,10 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       ref={carouselRef}
-      className="overflow-hidden"
+      className="carousel-content-viewport"
       data-slot="carousel-content"
     >
-      <div
-        className={cn(
-          "flex",
-          orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
-          className,
-        )}
-        {...props}
-      />
+      <div className={["carousel-content-inner", className || ""].filter(Boolean).join(" ")} {...props} />
     </div>
   );
 }
@@ -161,11 +154,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       role="group"
       aria-roledescription="slide"
       data-slot="carousel-item"
-      className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
-        className,
-      )}
+      className={["carousel-item", className || ""].filter(Boolean).join(" ")}
       {...props}
     />
   );
@@ -184,13 +173,7 @@ function CarouselPrevious({
       data-slot="carousel-previous"
       variant={variant}
       size={size}
-      className={cn(
-        "absolute size-8 rounded-full",
-        orientation === "horizontal"
-          ? "top-1/2 -left-12 -translate-y-1/2"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
-        className,
-      )}
+      className={["carousel-prev", className || ""].filter(Boolean).join(" ")}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
@@ -214,13 +197,7 @@ function CarouselNext({
       data-slot="carousel-next"
       variant={variant}
       size={size}
-      className={cn(
-        "absolute size-8 rounded-full",
-        orientation === "horizontal"
-          ? "top-1/2 -right-12 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-        className,
-      )}
+      className={["carousel-next", className || ""].filter(Boolean).join(" ")}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}

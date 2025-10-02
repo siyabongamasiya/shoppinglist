@@ -31,11 +31,13 @@ export class ShoppingList {
   constructor(
     shoppingListId: string,
     shoppingListName: string,
+    shoppingListdate:string,
     shoppingListcategory: string,
     shoppingListItems: string[]
   ) {
     this.ShoppingListId = shoppingListId;
     this.ShoppingListName = shoppingListName;
+    this.ShoppingListDate = shoppingListdate;
     this.ShoppingListcategory = shoppingListcategory;
     this.ShoppingListItems = shoppingListItems;
   }

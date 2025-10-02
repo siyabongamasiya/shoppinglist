@@ -1,3 +1,6 @@
+@import "../styles/globals.css";
+@import "../styles/components/button.css";
+
 .home-page {
   min-height: 100vh;
   background: var(--background);
@@ -66,7 +69,7 @@
   width: 100%;
   padding: 0.625rem 0.875rem 0.625rem 2.5rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: 8px;
   background: var(--input-background);
   color: var(--foreground);
   font-size: 0.875rem;
@@ -87,14 +90,14 @@
   }
 }
 
-.btn {
+.btn { 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: 8px;
   background: var(--primary);
   color: var(--primary-foreground);
   cursor: pointer;
@@ -314,6 +317,7 @@
 .modal-description {
   color: var(--muted-foreground);
   font-size: 0.875rem;
+  
 }
 
 .modal-body {
@@ -326,4 +330,32 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
+}
+
+.form-group {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-background);
+  color: var(--foreground);
+  font-size: 0.875rem;
+}
+
+.form-input:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
