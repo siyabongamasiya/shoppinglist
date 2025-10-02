@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { toast } from 'sonner';
 import '../styles/LoginPage.css';
+import "../styles/globals.css"
 
 type LoginPageProps = {
   onLogin: (email: string, password: string) => void;
@@ -75,7 +76,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
           <div className="login-footer">
             <button
               type="submit"
-              className="btn-primary"
+              className="btn"
               disabled={isLoading}
             >
               {isLoading ? 'Signing in...' : 'Login'}

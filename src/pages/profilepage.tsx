@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { Navigation } from './Navigation';
-import { Edit, Lock } from 'lucide-react';
-import { toast } from 'sonner';
-import '../styles/ProfilePage.css';
-import '../styles/HomePage.css';
-import type { User } from '../models/models';
-
+import { useState } from "react";
+import { Navigation } from "../components/Navigation";
+import { Edit, Lock } from "lucide-react";
+import { toast } from "sonner";
+import "../styles/ProfilePage.css";
+import "../styles/HomePage.css";
+import type { User } from "../models/models";
 
 type ProfilePageProps = {
   user: User;
@@ -31,13 +30,13 @@ export function ProfilePage({
   const [editCellNumber, setEditCellNumber] = useState(user.Cellnumber);
 
   // Password state
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const handleUpdateProfile = () => {
     if (!editName || !editSurname || !editEmail || !editCellNumber) {
-      toast.error('Please fill in all fields');
+      toast.error("Please fill in all fields");
       return;
     }
 
@@ -53,35 +52,35 @@ export function ProfilePage({
       });
       setIsEditDialogOpen(false);
       setIsLoading(false);
-      toast.success('Profile updated successfully!');
+      toast.success("Profile updated successfully!");
     }, 500);
   };
 
   const handleUpdatePassword = () => {
     if (!currentPassword || !newPassword || !confirmNewPassword) {
-      toast.error('Please fill in all fields');
+      toast.error("Please fill in all fields");
       return;
     }
 
     if (newPassword !== confirmNewPassword) {
-      toast.error('New passwords do not match');
+      toast.error("New passwords do not match");
       return;
     }
 
     if (newPassword.length < 6) {
-      toast.error('Password must be at least 6 characters');
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
     setIsLoading(true);
 
     setTimeout(() => {
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmNewPassword('');
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
       setIsPasswordDialogOpen(false);
       setIsLoading(false);
-      toast.success('Password updated successfully!');
+      toast.success("Password updated successfully!");
     }, 500);
   };
 
@@ -136,12 +135,18 @@ export function ProfilePage({
                 </div>
               </div>
 
-              <div className="profile-info-item" style={{ marginTop: '1.5rem' }}>
+              <div
+                className="profile-info-item"
+                style={{ marginTop: "1.5rem" }}
+              >
                 <label className="profile-info-label">Email</label>
                 <p className="profile-info-value">{user.EmailAddress}</p>
               </div>
 
-              <div className="profile-info-item" style={{ marginTop: '1.5rem' }}>
+              <div
+                className="profile-info-item"
+                style={{ marginTop: "1.5rem" }}
+              >
                 <label className="profile-info-label">Cell Number</label>
                 <p className="profile-info-value">{user.Cellnumber}</p>
               </div>
@@ -175,17 +180,24 @@ export function ProfilePage({
 
       {/* Edit Profile Dialog */}
       {isEditDialogOpen && (
-        <div className="modal-overlay" onClick={() => setIsEditDialogOpen(false)}>
+        <div
+          className="modal-overlay"
+          onClick={() => setIsEditDialogOpen(false)}
+        >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 className="modal-title">Edit Profile</h3>
-              <p className="modal-description">Update your personal information</p>
+              <p className="modal-description">
+                Update your personal information
+              </p>
             </div>
 
             <div className="modal-body">
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="editName" className="form-label">Name</label>
+                  <label htmlFor="editName" className="form-label">
+                    Name
+                  </label>
                   <input
                     id="editName"
                     value={editName}
@@ -196,7 +208,9 @@ export function ProfilePage({
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="editSurname" className="form-label">Surname</label>
+                  <label htmlFor="editSurname" className="form-label">
+                    Surname
+                  </label>
                   <input
                     id="editSurname"
                     value={editSurname}
@@ -208,7 +222,9 @@ export function ProfilePage({
               </div>
 
               <div className="form-group">
-                <label htmlFor="editEmail" className="form-label">Email</label>
+                <label htmlFor="editEmail" className="form-label">
+                  Email
+                </label>
                 <input
                   id="editEmail"
                   type="email"
@@ -220,7 +236,9 @@ export function ProfilePage({
               </div>
 
               <div className="form-group">
-                <label htmlFor="editCellNumber" className="form-label">Cell Number</label>
+                <label htmlFor="editCellNumber" className="form-label">
+                  Cell Number
+                </label>
                 <input
                   id="editCellNumber"
                   type="tel"
@@ -240,8 +258,12 @@ export function ProfilePage({
               >
                 Cancel
               </button>
-              <button className="btn" onClick={handleUpdateProfile} disabled={isLoading}>
-                {isLoading ? 'Updating...' : 'Update Profile'}
+              <button
+                className="btn"
+                onClick={handleUpdateProfile}
+                disabled={isLoading}
+              >
+                {isLoading ? "Updating..." : "Update Profile"}
               </button>
             </div>
           </div>
@@ -250,7 +272,10 @@ export function ProfilePage({
 
       {/* Change Password Dialog */}
       {isPasswordDialogOpen && (
-        <div className="modal-overlay" onClick={() => setIsPasswordDialogOpen(false)}>
+        <div
+          className="modal-overlay"
+          onClick={() => setIsPasswordDialogOpen(false)}
+        >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 className="modal-title">Change Password</h3>
@@ -259,7 +284,9 @@ export function ProfilePage({
 
             <div className="modal-body">
               <div className="form-group">
-                <label htmlFor="currentPassword" className="form-label">Current Password</label>
+                <label htmlFor="currentPassword" className="form-label">
+                  Current Password
+                </label>
                 <input
                   id="currentPassword"
                   type="password"
@@ -272,7 +299,9 @@ export function ProfilePage({
               </div>
 
               <div className="form-group">
-                <label htmlFor="newPassword" className="form-label">New Password</label>
+                <label htmlFor="newPassword" className="form-label">
+                  New Password
+                </label>
                 <input
                   id="newPassword"
                   type="password"
@@ -285,7 +314,9 @@ export function ProfilePage({
               </div>
 
               <div className="form-group">
-                <label htmlFor="confirmNewPassword" className="form-label">Confirm New Password</label>
+                <label htmlFor="confirmNewPassword" className="form-label">
+                  Confirm New Password
+                </label>
                 <input
                   id="confirmNewPassword"
                   type="password"
@@ -306,8 +337,12 @@ export function ProfilePage({
               >
                 Cancel
               </button>
-              <button className="btn" onClick={handleUpdatePassword} disabled={isLoading}>
-                {isLoading ? 'Updating...' : 'Update Password'}
+              <button
+                className="btn"
+                onClick={handleUpdatePassword}
+                disabled={isLoading}
+              >
+                {isLoading ? "Updating..." : "Update Password"}
               </button>
             </div>
           </div>

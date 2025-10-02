@@ -26,14 +26,14 @@ export class ShoppingList {
   ShoppingListName!: string;
   ShoppingListDate!: string;
   ShoppingListcategory!: string;
-  ShoppingListItems!: string[];
+  ShoppingListItems!: ShoppingListItem[];
 
   constructor(
-    shoppingListId: string,
+    shoppingListId: string = "",
     shoppingListName: string,
     shoppingListdate:string,
     shoppingListcategory: string,
-    shoppingListItems: string[]
+    shoppingListItems: ShoppingListItem[]
   ) {
     this.ShoppingListId = shoppingListId;
     this.ShoppingListName = shoppingListName;

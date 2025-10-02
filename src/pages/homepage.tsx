@@ -1,12 +1,12 @@
-import { useState, useMemo } from 'react';
-import { Navigation } from './Navigation';
-import { toast } from 'sonner';
-import '../styles/HomePage.css';
-import type { ShoppingList, User } from '../models/models';
-import { SearchControls } from '../components/SearchControls';
-import { ShoppingListsGrid } from '../components/ShoppingListsGrid';
-import { AddListDialog } from '../components/AddListDialog';
-import { EditListDialog } from '../components/EditListDialog';
+import { useState, useMemo } from "react";
+import { Navigation } from "../components/Navigation";
+import { toast } from "sonner";
+import "../styles/HomePage.css";
+import type { ShoppingList, User } from "../models/models";
+import { SearchControls } from "../components/SearchControls";
+import { ShoppingListsGrid } from "../components/ShoppingListsGrid";
+import { AddListDialog } from "../components/AddListDialog";
+import { EditListDialog } from "../components/EditListDialog";
 
 type HomePageProps = {
   user: User;
@@ -19,8 +19,8 @@ type HomePageProps = {
   onDeleteList: (listId: string) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  sortBy: 'name' | 'category' | 'date';
-  setSortBy: (sortBy: 'name' | 'category' | 'date') => void;
+  sortBy: "name" | "category" | "date";
+  setSortBy: (sortBy: "name" | "category" | "date") => void;
 };
 
 export function HomePage({
@@ -40,25 +40,31 @@ export function HomePage({
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingList, setEditingList] = useState<ShoppingList | null>(null);
-  const [newListName, setNewListName] = useState('');
-  const [newListCategory, setNewListCategory] = useState('');
+  const [newListName, setNewListName] = useState("");
+  const [newListCategory, setNewListCategory] = useState("");
 
   // Filter and sort lists
   const filteredAndSortedLists = useMemo(() => {
     let filtered = shoppingLists.filter(
       (list) =>
-        list.ShoppingListName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        list.ShoppingListcategory.toLowerCase().includes(searchQuery.toLowerCase())
+        list.ShoppingListName.toLowerCase().includes(
+          searchQuery.toLowerCase()
+        ) ||
+        list.ShoppingListcategory.toLowerCase().includes(
+          searchQuery.toLowerCase()
+        )
     );
 
     const sorted = [...filtered].sort((a, b) => {
-      if (sortBy === 'name') {
+      if (sortBy === "name") {
         return a.ShoppingListName.localeCompare(b.ShoppingListName);
-      } else if (sortBy === 'category') {
+      } else if (sortBy === "category") {
         return a.ShoppingListcategory.localeCompare(b.ShoppingListcategory);
       } else {
-        return new Date(b.ShoppingListDate).getTime() - new Date(a.ShoppingListDate).getTime();
-
+        return (
+          new Date(b.ShoppingListDate).getTime() -
+          new Date(a.ShoppingListDate).getTime()
+        );
       }
     });
 
@@ -67,35 +73,35 @@ export function HomePage({
 
   const handleAddList = () => {
     if (!newListName || !newListCategory) {
-      toast.error('Please fill in all fields');
+      toast.error("Please fill in all fields");
       return;
     }
 
     onAddList(newListName, newListCategory);
-    setNewListName('');
-    setNewListCategory('');
+    setNewListName("");
+    setNewListCategory("");
     setIsAddDialogOpen(false);
-    toast.success('Shopping list created!');
+    toast.success("Shopping list created!");
   };
 
   const handleEditList = () => {
     if (!editingList || !newListName || !newListCategory) {
-      toast.error('Please fill in all fields');
+      toast.error("Please fill in all fields");
       return;
     }
 
     onUpdateList(editingList.ShoppingListId, newListName, newListCategory);
     setEditingList(null);
-    setNewListName('');
-    setNewListCategory('');
+    setNewListName("");
+    setNewListCategory("");
     setIsEditDialogOpen(false);
-    toast.success('Shopping list updated!');
+    toast.success("Shopping list updated!");
   };
 
   const handleDeleteList = (listId: string, listName: string) => {
     if (confirm(`Are you sure you want to delete "${listName}"?`)) {
       onDeleteList(listId);
-      toast.success('Shopping list deleted!');
+      toast.success("Shopping list deleted!");
     }
   };
 
@@ -105,8 +111,6 @@ export function HomePage({
     setNewListCategory(list.ShoppingListcategory);
     setIsEditDialogOpen(true);
   };
-
-  
 
   return (
     <div className="home-page">

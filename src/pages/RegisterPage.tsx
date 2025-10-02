@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { toast } from 'sonner';
 import '../styles/RegisterPage.css';
-import '../styles/LoginPage.css';
+import "../styles/globals.css"
 
 type RegisterPageProps = {
   onRegister: (data: {
@@ -27,20 +27,20 @@ export function RegisterPage({ onRegister, onNavigateToLogin }: RegisterPageProp
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password || !confirmPassword || !name || !surname || !cellNumber) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+    // if (!email || !password || !confirmPassword || !name || !surname || !cellNumber) {
+    //   toast.error('Please fill in all fields');
+    //   return;
+    // }
 
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   toast.error('Passwords do not match');
+    //   return;
+    // }
 
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters');
-      return;
-    }
+    // if (password.length < 6) {
+    //   toast.error('Password must be at least 6 characters');
+    //   return;
+    // }
 
     setIsLoading(true);
 
@@ -152,7 +152,7 @@ export function RegisterPage({ onRegister, onNavigateToLogin }: RegisterPageProp
           <div className="register-footer">
             <button
               type="submit"
-              className="btn-primary"
+              className="btn"
               disabled={isLoading}
             >
               {isLoading ? 'Creating account...' : 'Register'}

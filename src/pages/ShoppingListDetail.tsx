@@ -1,37 +1,29 @@
-import { useState } from 'react';
-import { Navigation } from './Navigation';
-import { Plus, Edit, Trash2, Share2, ArrowLeft, Image as ImageIcon } from 'lucide-react';
-import { toast } from 'sonner';
-import '../styles/ShoppingListDetail.css';
-import '../styles/HomePage.css';
-
-interface User {
-  [key: string]: unknown;
-}
-
-interface ShoppingListItem {
-  id: string;
-  name: string;
-  quantity: number;
-  category: string;
-  notes?: string;
-  image?: string;
-}
-
-interface ShoppingList {
-  id: string;
-  name: string;
-  category: string;
-  items: ShoppingListItem[];
-}
+import { useState } from "react";
+import { Navigation } from "../components/Navigation";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Share2,
+  ArrowLeft,
+  Image as ImageIcon,
+} from "lucide-react";
+import { toast } from "sonner";
+import "../styles/ShoppingListDetail.css";
+import "../styles/HomePage.css";
+import type { ShoppingList, ShoppingListItem, User } from "../models/models";
 
 type ShoppingListDetailProps = {
   user: User;
   list: ShoppingList;
   onNavigateToHome: () => void;
   onLogout: () => void;
-  onAddItem: (listId: string, item: Omit<ShoppingListItem, 'id'>) => void;
-  onUpdateItem: (listId: string, itemId: string, item: Omit<ShoppingListItem, 'id'>) => void;
+  onAddItem: (listId: string, item: Omit<ShoppingListItem, "id">) => void;
+  onUpdateItem: (
+    listId: string,
+    itemId: string,
+    item: Omit<ShoppingListItem, "id">
+  ) => void;
   onDeleteItem: (listId: string, itemId: string) => void;
 };
 
@@ -48,96 +40,98 @@ export function ShoppingListDetail({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ShoppingListItem | null>(null);
 
-  const [itemName, setItemName] = useState('');
-  const [itemQuantity, setItemQuantity] = useState('1');
-  const [itemCategory, setItemCategory] = useState('');
-  const [itemNotes, setItemNotes] = useState('');
-  const [itemImage, setItemImage] = useState('');
+  const [itemName, setItemName] = useState("");
+  const [itemQuantity, setItemQuantity] = useState("1");
+  const [itemCategory, setItemCategory] = useState("");
+  const [itemNotes, setItemNotes] = useState("");
+  const [itemImage, setItemImage] = useState("");
 
   const resetForm = () => {
-    setItemName('');
-    setItemQuantity('1');
-    setItemCategory('');
-    setItemNotes('');
-    setItemImage('');
+    setItemName("");
+    setItemQuantity("1");
+    setItemCategory("");
+    setItemNotes("");
+    setItemImage("");
   };
 
   const handleAddItem = () => {
     if (!itemName || !itemQuantity || !itemCategory) {
-      toast.error('Please fill in required fields');
+      toast.error("Please fill in required fields");
       return;
     }
 
     const quantity = parseInt(itemQuantity);
     if (isNaN(quantity) || quantity <= 0) {
-      toast.error('Please enter a valid quantity');
+      toast.error("Please enter a valid quantity");
       return;
     }
 
-    onAddItem(list.id, {
-      name: itemName,
-      quantity,
-      category: itemCategory,
-      notes: itemNotes || undefined,
-      image: itemImage || undefined,
+    onAddItem(list.ShoppingListId, {
+      ShoppingListItemId: "",
+      ShoppingListItemName: itemName,
+      ShoppingListItemQuantity: quantity,
+      ShoppingListItemCategory: itemCategory,
+      ShoppingListItemNotes: itemNotes,
     });
 
     resetForm();
     setIsAddDialogOpen(false);
-    toast.success('Item added!');
+    toast.success("Item added!");
   };
 
   const handleUpdateItem = () => {
     if (!editingItem || !itemName || !itemQuantity || !itemCategory) {
-      toast.error('Please fill in required fields');
+      toast.error("Please fill in required fields");
       return;
     }
 
     const quantity = parseInt(itemQuantity);
     if (isNaN(quantity) || quantity <= 0) {
-      toast.error('Please enter a valid quantity');
+      toast.error("Please enter a valid quantity");
       return;
     }
 
-    onUpdateItem(list.id, editingItem.id, {
-      name: itemName,
-      quantity,
-      category: itemCategory,
-      notes: itemNotes || undefined,
-      image: itemImage || undefined,
+    onUpdateItem(list.ShoppingListId, editingItem.ShoppingListItemId, {
+      ShoppingListItemId: "",
+      ShoppingListItemName: itemName,
+      ShoppingListItemQuantity: quantity,
+      ShoppingListItemCategory: itemCategory,
+      ShoppingListItemNotes: itemNotes,
     });
 
     resetForm();
     setEditingItem(null);
     setIsEditDialogOpen(false);
-    toast.success('Item updated!');
+    toast.success("Item updated!");
   };
 
   const handleDeleteItem = (itemId: string, itemName: string) => {
     if (confirm(`Remove "${itemName}" from the list?`)) {
-      onDeleteItem(list.id, itemId);
-      toast.success('Item removed!');
+      onDeleteItem(list.ShoppingListId, itemId);
+      toast.success("Item removed!");
     }
   };
 
   const openEditDialog = (item: ShoppingListItem) => {
     setEditingItem(item);
-    setItemName(item.name);
-    setItemQuantity(item.quantity.toString());
-    setItemCategory(item.category);
-    setItemNotes(item.notes || '');
-    setItemImage(item.image || '');
+    setItemName(item.ShoppingListItemName);
+    setItemQuantity(item.ShoppingListItemQuantity.toString());
+    setItemCategory(item.ShoppingListItemCategory);
+    setItemNotes(item.ShoppingListItemNotes);
     setIsEditDialogOpen(true);
   };
 
   const handleShareList = () => {
     // Mock share functionality
-    const shareUrl = `https://shopsmart.app/lists/${list.id}`;
-    navigator.clipboard.writeText(shareUrl).then(() => {
-      toast.success('Share link copied to clipboard!');
-    }).catch(() => {
-      toast.error('Failed to copy link');
-    });
+    const shareUrl = `https://shopsmart.app/lists/${list.ShoppingListId}`;
+    navigator.clipboard
+      .writeText(shareUrl)
+      .then(() => {
+        toast.success("Share link copied to clipboard!");
+      })
+      .catch(() => {
+        toast.error("Failed to copy link");
+      });
   };
 
   return (
@@ -158,15 +152,12 @@ export function ShoppingListDetail({
 
         <div className="list-detail-header">
           <div className="list-detail-info">
-            <h1>{list.name}</h1>
-            <p>{list.category}</p>
+            <h1>{list.ShoppingListId}</h1>
+            <p>{list.ShoppingListcategory}</p>
           </div>
 
           <div className="list-detail-actions">
-            <button
-              className="btn btn-outline"
-              onClick={handleShareList}
-            >
+            <button className="btn btn-outline" onClick={handleShareList}>
               <Share2 />
               Share List
             </button>
@@ -178,7 +169,7 @@ export function ShoppingListDetail({
         </div>
 
         {/* Items */}
-        {list.items.length === 0 ? (
+        {list.ShoppingListItems.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-content">
               <div className="empty-icon">
@@ -198,26 +189,31 @@ export function ShoppingListDetail({
           <>
             {/* Mobile Cards View */}
             <div className="mobile-view">
-              {list.items.map((item) => (
-                <div key={item.id} className="item-card">
+              {list.ShoppingListItems.map((item) => (
+                <div key={item.ShoppingListItemId} className="item-card">
                   <div className="item-card-header">
                     <div className="item-card-title-row">
                       <div className="item-card-title-content">
-                        <h4 className="item-card-title">{item.name}</h4>
+                        <h4 className="item-card-title">
+                          {item.ShoppingListItemName}
+                        </h4>
                         <p className="item-card-description">
-                          Qty: {item.quantity} • {item.category}
+                          Qty: {item.ShoppingListItemQuantity} •{" "}
+                          {item.ShoppingListItemCategory}
                         </p>
                       </div>
-                      {item.image && (
+                      {/* {item.image && (
                         <div className="item-image-placeholder">
                           <ImageIcon />
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
-                  {item.notes && (
+                  {item.ShoppingListItemNotes && (
                     <div className="item-card-content">
-                      <p className="item-card-notes">{item.notes}</p>
+                      <p className="item-card-notes">
+                        {item.ShoppingListItemNotes}
+                      </p>
                     </div>
                   )}
                   <div className="item-card-footer">
@@ -230,7 +226,12 @@ export function ShoppingListDetail({
                     </button>
                     <button
                       className="btn btn-outline btn-sm"
-                      onClick={() => handleDeleteItem(item.id, item.name)}
+                      onClick={() =>
+                        handleDeleteItem(
+                          item.ShoppingListItemId,
+                          item.ShoppingListItemName
+                        )
+                      }
                     >
                       <Trash2 />
                       Remove
@@ -253,22 +254,22 @@ export function ShoppingListDetail({
                   </tr>
                 </thead>
                 <tbody>
-                  {list.items.map((item) => (
-                    <tr key={item.id}>
+                  {list.ShoppingListItems.map((item) => (
+                    <tr key={item.ShoppingListItemId}>
                       <td>
                         <div className="table-cell-content">
-                          {item.image && (
+                          {/* {item.image && (
                             <div className="table-image">
                               <ImageIcon />
                             </div>
-                          )}
-                          {item.name}
+                          )} */}
+                          {item.ShoppingListItemName}
                         </div>
                       </td>
-                      <td>{item.quantity}</td>
-                      <td>{item.category}</td>
+                      <td>{item.ShoppingListItemQuantity}</td>
+                      <td>{item.ShoppingListItemCategory}</td>
                       <td className="table-notes">
-                        {item.notes || '-'}
+                        {item.ShoppingListItemNotes}
                       </td>
                       <td className="text-right">
                         <div className="table-actions">
@@ -280,7 +281,12 @@ export function ShoppingListDetail({
                           </button>
                           <button
                             className="btn-ghost btn-sm"
-                            onClick={() => handleDeleteItem(item.id, item.name)}
+                            onClick={() =>
+                              handleDeleteItem(
+                                item.ShoppingListItemId,
+                                item.ShoppingListItemName
+                              )
+                            }
                           >
                             <Trash2 />
                           </button>
@@ -297,7 +303,10 @@ export function ShoppingListDetail({
 
       {/* Add Item Dialog */}
       {isAddDialogOpen && (
-        <div className="modal-overlay" onClick={() => setIsAddDialogOpen(false)}>
+        <div
+          className="modal-overlay"
+          onClick={() => setIsAddDialogOpen(false)}
+        >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 className="modal-title">Add Item</h3>
@@ -351,7 +360,9 @@ export function ShoppingListDetail({
               </div>
 
               <div className="form-group">
-                <label htmlFor="itemNotes" className="form-label">Notes (optional)</label>
+                <label htmlFor="itemNotes" className="form-label">
+                  Notes (optional)
+                </label>
                 <textarea
                   id="itemNotes"
                   placeholder="Additional details..."
@@ -363,7 +374,9 @@ export function ShoppingListDetail({
               </div>
 
               <div className="form-group">
-                <label htmlFor="itemImage" className="form-label">Image URL (optional)</label>
+                <label htmlFor="itemImage" className="form-label">
+                  Image URL (optional)
+                </label>
                 <input
                   id="itemImage"
                   type="url"
@@ -385,7 +398,9 @@ export function ShoppingListDetail({
               >
                 Cancel
               </button>
-              <button className="btn" onClick={handleAddItem}>Add Item</button>
+              <button className="btn" onClick={handleAddItem}>
+                Add Item
+              </button>
             </div>
           </div>
         </div>
@@ -393,7 +408,10 @@ export function ShoppingListDetail({
 
       {/* Edit Item Dialog */}
       {isEditDialogOpen && (
-        <div className="modal-overlay" onClick={() => setIsEditDialogOpen(false)}>
+        <div
+          className="modal-overlay"
+          onClick={() => setIsEditDialogOpen(false)}
+        >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 className="modal-title">Edit Item</h3>
@@ -445,7 +463,9 @@ export function ShoppingListDetail({
               </div>
 
               <div className="form-group">
-                <label htmlFor="editItemNotes" className="form-label">Notes (optional)</label>
+                <label htmlFor="editItemNotes" className="form-label">
+                  Notes (optional)
+                </label>
                 <textarea
                   id="editItemNotes"
                   placeholder="Additional details..."
@@ -457,7 +477,9 @@ export function ShoppingListDetail({
               </div>
 
               <div className="form-group">
-                <label htmlFor="editItemImage" className="form-label">Image URL (optional)</label>
+                <label htmlFor="editItemImage" className="form-label">
+                  Image URL (optional)
+                </label>
                 <input
                   id="editItemImage"
                   type="url"
@@ -480,7 +502,9 @@ export function ShoppingListDetail({
               >
                 Cancel
               </button>
-              <button className="btn" onClick={handleUpdateItem}>Update Item</button>
+              <button className="btn" onClick={handleUpdateItem}>
+                Update Item
+              </button>
             </div>
           </div>
         </div>

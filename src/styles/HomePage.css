@@ -90,27 +90,7 @@
   }
 }
 
-.btn { 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--primary);
-  color: var(--primary-foreground);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.875rem;
-  white-space: nowrap;
-}
 
-.btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
 
 .btn svg {
   width: 1rem;
