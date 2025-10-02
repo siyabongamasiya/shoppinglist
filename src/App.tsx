@@ -1,15 +1,30 @@
-import { useState } from 'react'
-import './App.css'
-import Login from './pages/login'
-import Homepage from './pages/homepage'
+import { User } from "./models/models";
+import { HomePage } from "./pages/HomePage";
 
-function App() {
-
+export default function App() {
+  const user = new User(
+    "siya@gmail.com",
+    "password",
+    "siyabonga",
+    "khanyile",
+    "0676984906"
+  );
   return (
-    <>
-      <Homepage/>
-    </>
-  )
+    <div style={{ padding: 16 }}>
+      <HomePage
+        user={user}
+        shoppingLists={[]}
+        onLogout={() => {}}
+        onNavigateToProfile={() => {}}
+        onNavigateToListDetail={() => {}}
+        onAddList={() => {}}
+        onUpdateList={() => {}}
+        onDeleteList={() => {}}
+        searchQuery=""
+        setSearchQuery={() => {}}
+        sortBy="date"
+        setSortBy={() => {}}
+      />
+    </div>
+  );
 }
-
-export default App
