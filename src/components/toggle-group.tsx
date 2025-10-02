@@ -2,14 +2,12 @@
 
 import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import { type VariantProps } from "class-variance-authority";
+import "../styles/components/toggle.css";
 
-import { cn } from "./utils";
-import { toggleVariants } from "./toggle";
-
-const ToggleGroupContext = React.createContext<
-  VariantProps<typeof toggleVariants>
->({
+const ToggleGroupContext = React.createContext<{
+  size?: "default" | "sm" | "lg";
+  variant?: "default" | "outline";
+}>({
   size: "default",
   variant: "default",
 });
@@ -20,17 +18,16 @@ function ToggleGroup({
   size,
   children,
   ...props
-}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
-  VariantProps<typeof toggleVariants>) {
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> & {
+  variant?: "default" | "outline";
+  size?: "default" | "sm" | "lg";
+}) {
   return (
     <ToggleGroupPrimitive.Root
       data-slot="toggle-group"
       data-variant={variant}
       data-size={size}
-      className={cn(
-        "group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs",
-        className,
-      )}
+      className={["toggle-group", className || ""].filter(Boolean).join(" ")}
       {...props}
     >
       <ToggleGroupContext.Provider value={{ variant, size }}>
@@ -46,8 +43,10 @@ function ToggleGroupItem({
   variant,
   size,
   ...props
-}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
-  VariantProps<typeof toggleVariants>) {
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> & {
+  variant?: "default" | "outline";
+  size?: "default" | "sm" | "lg";
+}) {
   const context = React.useContext(ToggleGroupContext);
 
   return (
@@ -55,14 +54,7 @@ function ToggleGroupItem({
       data-slot="toggle-group-item"
       data-variant={context.variant || variant}
       data-size={context.size || size}
-      className={cn(
-        toggleVariants({
-          variant: context.variant || variant,
-          size: context.size || size,
-        }),
-        "min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l",
-        className,
-      )}
+      className={["toggle", "toggle-group-item", className || ""].filter(Boolean).join(" ")}
       {...props}
     >
       {children}

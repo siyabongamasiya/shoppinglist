@@ -1,0 +1,12 @@
+.carousel { position: relative; }
+.carousel[data-orientation="horizontal"] .carousel-content-inner { display:flex; margin-left: -16px; }
+.carousel[data-orientation="vertical"] .carousel-content-inner { display:flex; flex-direction: column; margin-top: -16px; }
+.carousel-content-viewport { overflow: hidden; }
+.carousel-item { min-width: 0; flex-shrink: 0; flex-grow: 0; flex-basis: 100%; }
+.carousel[data-orientation="horizontal"] .carousel-item { padding-left: 16px; }
+.carousel[data-orientation="vertical"] .carousel-item { padding-top: 16px; }
+.carousel-prev, .carousel-next { position: absolute; width: 32px; height: 32px; border-radius: 9999px; display:inline-flex; align-items:center; justify-content:center; }
+.carousel[data-orientation="horizontal"] .carousel-prev { top: 50%; left: -48px; transform: translateY(-50%); }
+.carousel[data-orientation="horizontal"] .carousel-next { top: 50%; right: -48px; transform: translateY(-50%); }
+.carousel[data-orientation="vertical"] .carousel-prev { top: -48px; left: 50%; transform: translateX(-50%) rotate(90deg); }
+.carousel[data-orientation="vertical"] .carousel-next { bottom: -48px; left: 50%; transform: translateX(-50%) rotate(90deg); }

@@ -1,10 +1,10 @@
-import { cn } from "./utils";
+import "../styles/components/skeleton.css";
 
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="skeleton"
-      className={cn("bg-accent animate-pulse rounded-md", className)}
+      className={["skeleton", className || ""].filter(Boolean).join(" ")}
       {...props}
     />
   );
