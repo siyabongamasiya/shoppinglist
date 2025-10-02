@@ -1,23 +1,41 @@
-import React from "react";
-import { FaPlus } from "react-icons/fa";
+import * as React from "react";
+import "../styles/components/button.css";
 
-interface ButtonProps {
-  text: string;
-  onClick: () => void;
-  icon?: React.ReactNode;
-  style: React.CSSProperties;
+type ButtonVariant = "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+type ButtonSize = "default" | "sm" | "lg" | "icon";
+
+function buttonVariants({
+  variant = "default",
+  size = "default",
+  className = "",
+}: { variant?: ButtonVariant; size?: ButtonSize; className?: string }) {
+  const classes = [
+    "button",
+    `button--${variant}`,
+    `button--size-${size}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  return classes;
 }
 
-export default function Button({ text, onClick, icon, style }: ButtonProps) {
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  ...props
+}: React.ComponentProps<"button"> & {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+}) {
   return (
-    <div id="button-container" >
-      {icon}
-      <button
-        onClick={onClick}
-        style={style}
-      >
-        {text}
-      </button>
-    </div>
+    <button
+      data-slot="button"
+      className={buttonVariants({ variant, size, className })}
+      {...props}
+    />
   );
 }
+
+export { Button, buttonVariants };
