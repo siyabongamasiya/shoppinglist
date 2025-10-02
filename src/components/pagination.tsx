@@ -4,9 +4,7 @@ import {
   ChevronRightIcon,
   MoreHorizontalIcon,
 } from "lucide-react";
-
-import { cn } from "./utils";
-import { Button, buttonVariants } from "./button";
+import "../styles/components/pagination.css";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -14,7 +12,7 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
       role="navigation"
       aria-label="pagination"
       data-slot="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
+      className={["pagination", className || ""].filter(Boolean).join(" ")}
       {...props}
     />
   );
@@ -27,7 +25,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex flex-row items-center gap-1", className)}
+      className={["pagination-content", className || ""].filter(Boolean).join(" ")}
       {...props}
     />
   );
@@ -39,7 +37,7 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 
 type PaginationLinkProps = {
   isActive?: boolean;
-} & Pick<React.ComponentProps<typeof Button>, "size"> &
+} & { size?: "default" | "icon" } &
   React.ComponentProps<"a">;
 
 function PaginationLink({
@@ -53,13 +51,7 @@ function PaginationLink({
       aria-current={isActive ? "page" : undefined}
       data-slot="pagination-link"
       data-active={isActive}
-      className={cn(
-        buttonVariants({
-          variant: isActive ? "outline" : "ghost",
-          size,
-        }),
-        className,
-      )}
+      className={["pagination-link", className || ""].filter(Boolean).join(" ")}
       {...props}
     />
   );
@@ -73,11 +65,11 @@ function PaginationPrevious({
     <PaginationLink
       aria-label="Go to previous page"
       size="default"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      className={["gap-1", className || ""].filter(Boolean).join(" ")}
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      <span>Previous</span>
     </PaginationLink>
   );
 }
@@ -90,10 +82,10 @@ function PaginationNext({
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      className={["gap-1", className || ""].filter(Boolean).join(" ")}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
+      <span>Next</span>
       <ChevronRightIcon />
     </PaginationLink>
   );
@@ -107,10 +99,10 @@ function PaginationEllipsis({
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
-      className={cn("flex size-9 items-center justify-center", className)}
+      className={["pagination-ellipsis", className || ""].filter(Boolean).join(" ")}
       {...props}
     >
-      <MoreHorizontalIcon className="size-4" />
+      <MoreHorizontalIcon />
       <span className="sr-only">More pages</span>
     </span>
   );

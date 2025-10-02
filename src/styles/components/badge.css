@@ -1,0 +1,8 @@
+.badge { display:inline-flex; align-items:center; justify-content:center; gap:4px; border-radius:6px; border:1px solid transparent; padding:2px 8px; font-size:12px; font-weight:600; width:fit-content; white-space:nowrap; }
+.badge svg { width:12px; height:12px; pointer-events:none; }
+.badge:focus-visible { outline:3px solid rgba(59,130,246,0.5); outline-offset:2px; }
+
+.badge[data-variant="default"] { background: var(--primary,#111827); color: var(--primary-foreground,#ffffff); border-color: transparent; }
+.badge[data-variant="secondary"] { background: var(--secondary,#f3f4f6); color: var(--secondary-foreground,#111827); border-color: transparent; }
+.badge[data-variant="destructive"] { background: var(--destructive,#b91c1c); color:#fff; }
+.badge[data-variant="outline"] { background: transparent; color: var(--foreground,#111827); border-color: var(--border,#e5e7eb); }

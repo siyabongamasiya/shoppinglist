@@ -4,14 +4,8 @@ import { Edit, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import '../styles/ProfilePage.css';
 import '../styles/HomePage.css';
+import type { User } from '../models/models';
 
-interface User {
-  name: string;
-  surname: string;
-  email: string;
-  cellNumber: string;
-  [key: string]: unknown;
-}
 
 type ProfilePageProps = {
   user: User;
@@ -31,10 +25,10 @@ export function ProfilePage({
   const [isLoading, setIsLoading] = useState(false);
 
   // Edit profile state
-  const [editName, setEditName] = useState(user.name);
-  const [editSurname, setEditSurname] = useState(user.surname);
-  const [editEmail, setEditEmail] = useState(user.email);
-  const [editCellNumber, setEditCellNumber] = useState(user.cellNumber);
+  const [editName, setEditName] = useState(user.Name);
+  const [editSurname, setEditSurname] = useState(user.Surname);
+  const [editEmail, setEditEmail] = useState(user.EmailAddress);
+  const [editCellNumber, setEditCellNumber] = useState(user.Cellnumber);
 
   // Password state
   const [currentPassword, setCurrentPassword] = useState('');
@@ -52,10 +46,10 @@ export function ProfilePage({
     setTimeout(() => {
       onUpdateUser({
         ...user,
-        name: editName,
-        surname: editSurname,
-        email: editEmail,
-        cellNumber: editCellNumber,
+        Name: editName,
+        Surname: editSurname,
+        EmailAddress: editEmail,
+        Cellnumber: editCellNumber,
       });
       setIsEditDialogOpen(false);
       setIsLoading(false);
@@ -92,10 +86,10 @@ export function ProfilePage({
   };
 
   const openEditDialog = () => {
-    setEditName(user.name);
-    setEditSurname(user.surname);
-    setEditEmail(user.email);
-    setEditCellNumber(user.cellNumber);
+    setEditName(user.Name);
+    setEditSurname(user.Surname);
+    setEditEmail(user.EmailAddress);
+    setEditCellNumber(user.Cellnumber);
     setIsEditDialogOpen(true);
   };
 
@@ -134,22 +128,22 @@ export function ProfilePage({
               <div className="profile-info-grid">
                 <div className="profile-info-item">
                   <label className="profile-info-label">Name</label>
-                  <p className="profile-info-value">{user.name}</p>
+                  <p className="profile-info-value">{user.Name}</p>
                 </div>
                 <div className="profile-info-item">
                   <label className="profile-info-label">Surname</label>
-                  <p className="profile-info-value">{user.surname}</p>
+                  <p className="profile-info-value">{user.Surname}</p>
                 </div>
               </div>
 
               <div className="profile-info-item" style={{ marginTop: '1.5rem' }}>
                 <label className="profile-info-label">Email</label>
-                <p className="profile-info-value">{user.email}</p>
+                <p className="profile-info-value">{user.EmailAddress}</p>
               </div>
 
               <div className="profile-info-item" style={{ marginTop: '1.5rem' }}>
                 <label className="profile-info-label">Cell Number</label>
-                <p className="profile-info-value">{user.cellNumber}</p>
+                <p className="profile-info-value">{user.Cellnumber}</p>
               </div>
             </div>
           </div>
