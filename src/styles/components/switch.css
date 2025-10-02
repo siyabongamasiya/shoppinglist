@@ -1,0 +1,33 @@
+.switch {
+  display: inline-flex;
+  align-items: center;
+  width: 32px;
+  height: 18px;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background: var(--switch-off, rgba(0,0,0,0.08));
+  outline: none;
+}
+.switch:focus-visible {
+  outline: 3px solid rgba(59,130,246,0.5);
+  outline-offset: 2px;
+}
+.switch[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.switch[data-state="checked"] {
+  background: var(--primary, #111827);
+}
+.switch__thumb {
+  pointer-events: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--card, #fff);
+  transform: translateX(0);
+  transition: transform 0.2s ease;
+}
+.switch[data-state="checked"] .switch__thumb {
+  transform: translateX(calc(100% - 2px));
+}

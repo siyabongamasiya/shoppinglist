@@ -1,0 +1,15 @@
+.textarea {
+  width: 100%;
+  min-height: 4rem;
+  border: 1px solid var(--input-border, #e5e7eb);
+  background: var(--input-background, #ffffff);
+  color: var(--input-foreground, #111827);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  resize: none;
+  transition: box-shadow 0.15s ease, color 0.15s ease;
+}
+.textarea::placeholder { color: var(--muted-foreground, #6b7280); }
+.textarea:focus-visible { outline: 3px solid rgba(59,130,246,0.5); outline-offset: 2px; }
+.textarea:disabled { cursor: not-allowed; opacity: 0.5; }

@@ -1,0 +1,16 @@
+.tooltip-content {
+  z-index: 50;
+  width: max-content;
+  background: var(--primary, #111827);
+  color: var(--primary-foreground, #ffffff);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.tooltip-arrow {
+  width: 10px;
+  height: 10px;
+  background: var(--primary, #111827);
+  transform: rotate(45deg);
+  border-top-left-radius: 2px;
+}

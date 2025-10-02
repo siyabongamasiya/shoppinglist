@@ -1,0 +1,16 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+  user-select: none;
+}
+
+.label[aria-disabled="true"],
+.group[data-disabled="true"] .label,
+.peer:disabled ~ .label {
+  pointer-events: none;
+  opacity: 0.5;
+}

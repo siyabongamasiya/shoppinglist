@@ -1,0 +1,17 @@
+.radio-group { display: grid; gap: 12px; }
+.radio-group-item {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  border: 1px solid var(--input-border, #e5e7eb);
+  background: var(--input-background, #ffffff);
+  color: var(--primary, #111827);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+.radio-group-item:focus-visible {
+  outline: 3px solid rgba(59,130,246,0.5);
+  outline-offset: 2px;
+}
+.radio-group-item:disabled { cursor: not-allowed; opacity: 0.5; }
+.radio-group-indicator { position: relative; display: flex; align-items: center; justify-content: center; }
+.radio-group-indicator__icon { width: 8px; height: 8px; fill: currentColor; }
