@@ -5,6 +5,7 @@ import type { ShoppingList} from "../models/models";
 const initialState: ShoppingList = {
   ShoppingListId:"",
   ShoppingListName:"",
+  ShoppingListDate:"",
   ShoppingListcategory:"",
   ShoppingListItems:[]
 };
