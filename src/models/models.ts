@@ -49,21 +49,24 @@ export class ShoppingList {
 export class ShoppingListItem {
   ShoppingListItemId!: string;
   ShoppingListItemName!: string;
-  ShoppingListItemQuantity!: number;
+  ShoppingListItemQuantity!: string;
   ShoppingListItemNotes!: string;
   ShoppingListItemCategory!: string;
+  ShoppingListitemImage!:string;
 
   constructor(
     shoppingListItemId: string,
     shoppingListItemName: string,
     shoppingListItemNotes: string,
-    shoppingListItemQuantity: number,
-    shoppingListItemCategory: string
+    shoppingListItemQuantity: string,
+    shoppingListItemCategory: string,
+    shoppingListitemImage:string
   ) {
     this.ShoppingListItemId = shoppingListItemId;
     this.ShoppingListItemName = shoppingListItemName;
     this.ShoppingListItemQuantity = shoppingListItemQuantity;
     this.ShoppingListItemNotes = shoppingListItemNotes
     this.ShoppingListItemCategory = shoppingListItemCategory;
+    this.ShoppingListitemImage = shoppingListitemImage;
   }
 }

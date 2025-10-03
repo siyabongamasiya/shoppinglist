@@ -13,7 +13,56 @@
           "ShoppingListName": "weekly",
           "ShoppingListDate": "2025-10-03",
           "ShoppingListcategory": "groceries",
-          "ShoppingListItems": []
+          "ShoppingListItems": [
+            {
+              "ShoppingListItemId": "id-1759500156499-2383",
+              "ShoppingListItemName": "Ubisi",
+              "ShoppingListItemQuantity": "2",
+              "ShoppingListItemCategory": "dairy",
+              "ShoppingListItemNotes": "thenga kwa spar",
+              "ShoppingListitemImage": "\"\""
+            },
+            {
+              "ShoppingListItemId": "id-1759500381322-6136",
+              "ShoppingListItemName": "pen",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "stationery",
+              "ShoppingListItemNotes": "dfd",
+              "ShoppingListitemImage": "\"\""
+            },
+            {
+              "ShoppingListItemId": "id-1759501114563-7974",
+              "ShoppingListItemName": "food",
+              "ShoppingListItemQuantity": "2",
+              "ShoppingListItemCategory": "food",
+              "ShoppingListItemNotes": "ndskk",
+              "ShoppingListitemImage": "\"\""
+            },
+            {
+              "ShoppingListItemId": "id-1759501430386-2012",
+              "ShoppingListItemName": "rgs",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "seg",
+              "ShoppingListItemNotes": "ser",
+              "ShoppingListitemImage": "\"\""
+            },
+            {
+              "ShoppingListItemId": "id-1759501731343-4630",
+              "ShoppingListItemName": "rrr",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "ffff",
+              "ShoppingListItemNotes": "gfsrg",
+              "ShoppingListitemImage": "\"\""
+            },
+            {
+              "ShoppingListItemId": "id-1759501891188-2858",
+              "ShoppingListItemName": "golf",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "auto",
+              "ShoppingListItemNotes": "7.5",
+              "ShoppingListitemImage": "\"\""
+            }
+          ]
         },
         {
           "ShoppingListId": "id-1759493954885-2501",

@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { generateUniqueId } from "../../utilities";
 
-interface UserState extends User {
+export interface UserState extends User {
   isLoading: boolean;
   error?: string;
 }
@@ -13,6 +13,10 @@ export interface LoginArgs {
   email: string;
   password: string;
   onNavigate(): void;
+}
+export interface RefreshArgs {
+  email: string;
+  password: string;
 }
 
 export interface RegisterArgs {
@@ -23,7 +27,6 @@ export interface RegisterArgs {
   cellnumber: string;
   onNavigate: () => void;
 }
-
 
 const initialState: UserState = {
   id: "",
@@ -36,6 +39,29 @@ const initialState: UserState = {
   isLoading: false,
   error: "",
 };
+
+export const refreshUser = createAsyncThunk(
+  "userManagement/refreshUser",
+  async ({ email, password }: RefreshArgs, { rejectWithValue }) => {
+    try {
+      toast.dismiss();
+      toast.message("Refreshing...");
+      const response = await axios.get("http://localhost:3000/users");
+
+      const user: User = response.data.find(
+        (u: User) => u.EmailAddress === email && u.Password === password
+      );
+
+      if (!user) {
+        return rejectWithValue("User not found or incorrect credentials");
+      }
+      toast.dismiss();
+      return user;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to fetch user");
+    }
+  }
+);
 
 export const login = createAsyncThunk(
   "userManagement/login",
@@ -86,7 +112,7 @@ export const register = createAsyncThunk(
 
       // Create new user object
       const newUser: User = {
-        id:generateUniqueId()   ,
+        id: generateUniqueId(),
         EmailAddress: email,
         Password: password,
         Name: name,
@@ -100,7 +126,7 @@ export const register = createAsyncThunk(
 
       toast.dismiss();
       toast.success("Registered successfully");
-      onNavigate(); 
+      onNavigate();
 
       return newUser;
     } catch (error: any) {
@@ -117,13 +143,14 @@ export const userManagement = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending || register.pending, (state) => {
+      // Login
+      .addCase(login.pending, (state) => {
         state.isLoading = true;
         state.error = undefined;
       })
-      .addCase(login.fulfilled || register.fulfilled, (state, action) => {
+      .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.id = action.payload.id
+        state.id = action.payload.id;
         state.EmailAddress = action.payload.EmailAddress;
         state.Password = action.payload.Password;
         state.Name = action.payload.Name;
@@ -131,7 +158,51 @@ export const userManagement = createSlice({
         state.Cellnumber = action.payload.Cellnumber;
         state.shoppingLists = action.payload.shoppingLists;
       })
-      .addCase(login.rejected || register.rejected, (state, action) => {
+      .addCase(login.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+        toast.dismiss();
+        toast.error(action.payload as string);
+      })
+
+      // Register
+      .addCase(register.pending, (state) => {
+        state.isLoading = true;
+        state.error = undefined;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.id = action.payload.id;
+        state.EmailAddress = action.payload.EmailAddress;
+        state.Password = action.payload.Password;
+        state.Name = action.payload.Name;
+        state.Surname = action.payload.Surname;
+        state.Cellnumber = action.payload.Cellnumber;
+        state.shoppingLists = action.payload.shoppingLists;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+        toast.dismiss();
+        toast.error(action.payload as string);
+      })
+
+      // Refresh
+      .addCase(refreshUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = undefined;
+      })
+      .addCase(refreshUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.id = action.payload.id;
+        state.EmailAddress = action.payload.EmailAddress;
+        state.Password = action.payload.Password;
+        state.Name = action.payload.Name;
+        state.Surname = action.payload.Surname;
+        state.Cellnumber = action.payload.Cellnumber;
+        state.shoppingLists = action.payload.shoppingLists;
+      })
+      .addCase(refreshUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
         toast.dismiss();

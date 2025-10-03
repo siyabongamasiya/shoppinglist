@@ -72,9 +72,6 @@ export default function App() {
   function ShoppingListDetailRoute() {
     return (
       <ShoppingListDetail
-        onAddItem={() => {}}
-        onUpdateItem={() => {}}
-        onDeleteItem={() => {}}
       />
     );
   }

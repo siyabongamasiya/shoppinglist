@@ -11,36 +11,30 @@ import {
 import { toast } from "sonner";
 import "../styles/ShoppingListDetail.css";
 import "../styles/HomePage.css";
-import type { ShoppingList, ShoppingListItem, User } from "../models/models";
+import type { ShoppingList, ShoppingListItem} from "../models/models";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
+import { addListItem } from "../features/shoppingListManagement";
+import { generateUniqueId } from "../../utilities";
+import {type UserState } from "../features/userManagement";
 
-type ShoppingListDetailProps = {
-  onAddItem: (listId: string, item: Omit<ShoppingListItem, "id">) => void;
-  onUpdateItem: (
-    listId: string,
-    itemId: string,
-    item: Omit<ShoppingListItem, "id">
-  ) => void;
-  onDeleteItem: (listId: string, itemId: string) => void;
-};
-
-export function ShoppingListDetail({
-  onAddItem,
-  onUpdateItem,
-  onDeleteItem,
-}: ShoppingListDetailProps) {
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<ShoppingListItem | null>(null);
-  const { id } = useParams();
-
+export function ShoppingListDetail() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.userManagement);
+  const user: UserState = useAppSelector((state) => state.userManagement);
 
   const getListById = (id: string): ShoppingList | undefined => {
     return user.shoppingLists.find((list) => list.ShoppingListId === id);
   };
+
+
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<ShoppingListItem | null>(null);
+  const { id } = useParams();
+  const list = user.shoppingLists.find((l) => l.ShoppingListId === id);
+
+  
+
 
   const [itemName, setItemName] = useState("");
   const [itemQuantity, setItemQuantity] = useState("1");
@@ -48,8 +42,26 @@ export function ShoppingListDetail({
   const [itemNotes, setItemNotes] = useState("");
   const [itemImage, setItemImage] = useState("");
   const navigate = useNavigate();
-  const list = getListById(id!);
 
+  const addItem = () => {
+    dispatch(
+      addListItem({
+        email: user.EmailAddress,
+        shoppingListId: id!,
+        shoppingListItem: {
+          ShoppingListItemId: generateUniqueId(),
+          ShoppingListItemName: itemName,
+          ShoppingListItemQuantity: itemQuantity,
+          ShoppingListItemCategory: itemCategory,
+          ShoppingListItemNotes: itemNotes,
+          ShoppingListitemImage: itemImage,
+        },
+        onShoplistItemAdded: () => {
+          
+        },
+      })
+    );
+  };
 
   const resetForm = () => {
     setItemName("");
@@ -58,8 +70,6 @@ export function ShoppingListDetail({
     setItemNotes("");
     setItemImage("");
   };
-
-  
 
   const handleAddItem = () => {
     if (!itemName || !itemQuantity || !itemCategory) {
@@ -73,16 +83,9 @@ export function ShoppingListDetail({
       return;
     }
 
-    onAddItem(list!.ShoppingListId, {
-      ShoppingListItemId: "",
-      ShoppingListItemName: itemName,
-      ShoppingListItemQuantity: quantity,
-      ShoppingListItemCategory: itemCategory,
-      ShoppingListItemNotes: itemNotes,
-    });
-
     resetForm();
     setIsAddDialogOpen(false);
+    addItem();
     toast.success("Item added!");
   };
 
@@ -98,14 +101,6 @@ export function ShoppingListDetail({
       return;
     }
 
-    onUpdateItem(list!.ShoppingListId, editingItem.ShoppingListItemId, {
-      ShoppingListItemId: "",
-      ShoppingListItemName: itemName,
-      ShoppingListItemQuantity: quantity,
-      ShoppingListItemCategory: itemCategory,
-      ShoppingListItemNotes: itemNotes,
-    });
-
     resetForm();
     setEditingItem(null);
     setIsEditDialogOpen(false);
@@ -114,7 +109,7 @@ export function ShoppingListDetail({
 
   const handleDeleteItem = (itemId: string, itemName: string) => {
     if (confirm(`Remove "${itemName}" from the list?`)) {
-      onDeleteItem(list!.ShoppingListId, itemId);
+      // onDeleteItem(list!.ShoppingListId, itemId);
       toast.success("Item removed!");
     }
   };
@@ -159,7 +154,7 @@ export function ShoppingListDetail({
 
         <div className="list-detail-header">
           <div className="list-detail-info">
-            <h1>{list!.ShoppingListId}</h1>
+            <h1>{list!.ShoppingListName}</h1>
             <p>{list!.ShoppingListcategory}</p>
           </div>
 

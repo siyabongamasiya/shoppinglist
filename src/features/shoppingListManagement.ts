@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { ShoppingList, ShoppingListItem, User } from "../models/models";
 import axios from "axios";
 import { toast } from "sonner";
+import { refreshUser, type RefreshArgs } from "./userManagement";
 
 // Define the initial state using that type
 const initialState: ShoppingList = {
@@ -18,7 +19,7 @@ interface AddListArgs {
   onShoplistAdded(): void;
 }
 
-interface AddListItemArgs {
+export interface AddListItemArgs {
   email: string;
   shoppingListId: string;
   shoppingListItem: ShoppingListItem;
@@ -70,7 +71,7 @@ export const addList = createAsyncThunk(
   }
 );
 
-export const updateList = createAsyncThunk(
+export const addListItem = createAsyncThunk(
   "userManagement/addListItem",
   async (
     {
@@ -79,7 +80,7 @@ export const updateList = createAsyncThunk(
       shoppingListItem,
       onShoplistItemAdded,
     }: AddListItemArgs,
-    { rejectWithValue }
+    { dispatch, rejectWithValue }
   ) => {
     try {
       toast.dismiss();
@@ -102,7 +103,10 @@ export const updateList = createAsyncThunk(
         list.ShoppingListId === shoppingListId
           ? {
               ...list,
-              items: [...(list.ShoppingListItems || []), shoppingListItem], 
+              ShoppingListItems: [
+                ...(list.ShoppingListItems || []),
+                shoppingListItem,
+              ],
             }
           : list
       );
@@ -115,7 +119,12 @@ export const updateList = createAsyncThunk(
 
       toast.dismiss();
       toast.success("Item added successfully");
-      onShoplistItemAdded();
+      dispatch(
+        refreshUser({
+          email: user.EmailAddress,
+          password: user.Password,
+        } as RefreshArgs)
+      );
 
       return updatedUser;
     } catch (error: any) {
