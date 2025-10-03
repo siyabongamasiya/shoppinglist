@@ -5,16 +5,15 @@ import { toast } from "sonner";
 import "../styles/ProfilePage.css";
 import "../styles/HomePage.css";
 import type { User } from "../models/models";
+import { useAppSelector } from "../../hooks";
 
 type ProfilePageProps = {
-  user: User;
   onUpdateUser: (user: User) => void;
   onNavigateToHome: () => void;
   onLogout: () => void;
 };
 
 export function ProfilePage({
-  user,
   onUpdateUser,
   onNavigateToHome,
   onLogout,
@@ -22,6 +21,8 @@ export function ProfilePage({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const user = useAppSelector((state) => state.userManagement);
 
   // Edit profile state
   const [editName, setEditName] = useState(user.Name);

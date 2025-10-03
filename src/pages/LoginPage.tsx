@@ -1,37 +1,45 @@
-import { useState } from 'react';
-import { ShoppingCart } from 'lucide-react';
-import { toast } from 'sonner';
-import '../styles/LoginPage.css';
-import "../styles/globals.css"
-import {useAppSelector,useAppDispatch} from "../../hooks"
-import { login, type LoginArgs } from '../features/login';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
+import "../styles/LoginPage.css";
+import "../styles/globals.css";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import { login, type LoginArgs } from "../features/userManagement";
+import { useNavigate } from "react-router-dom";
 
 type LoginPageProps = {
   onLogin: (email: string, password: string) => void;
   onNavigateToRegister: () => void;
 };
 
-export function LoginPage({onNavigateToRegister }: LoginPageProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate()
-  
+export function LoginPage({ onNavigateToRegister }: LoginPageProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
   const user = useAppSelector((state) => state.userManagement);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user.EmailAddress || !user.Password) {
-      toast.error('Please fill in all fields');
+      toast.error("Please fill in all fields");
       return;
     }
-    
+
     // Simulate API call
     setTimeout(() => {
-      toast.success('Login successful!');
-      dispatch(login({email,password,onNavigate : () => {navigate("/")}} as LoginArgs))
+      toast.success("Login successful!");
+      dispatch(
+        login({
+          email,
+          password,
+          onNavigate: () => {
+            navigate("/");
+          },
+        } as LoginArgs)
+      );
     }, 500);
   };
 
@@ -51,7 +59,9 @@ export function LoginPage({onNavigateToRegister }: LoginPageProps) {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email" className="form-label">Email</label>
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
             <input
               id="email"
               type="email"
@@ -64,7 +74,9 @@ export function LoginPage({onNavigateToRegister }: LoginPageProps) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
             <input
               id="password"
               type="password"
@@ -77,12 +89,8 @@ export function LoginPage({onNavigateToRegister }: LoginPageProps) {
           </div>
 
           <div className="login-footer">
-            <button
-              type="submit"
-              className="btn"
-              disabled={user.isLoading}
-            >
-              {user.isLoading ? 'Signing in...' : 'Login'}
+            <button type="submit" className="btn" disabled={user.isLoading}>
+              {user.isLoading ? "Signing in..." : "Login"}
             </button>
 
             <div className="login-footer-text">

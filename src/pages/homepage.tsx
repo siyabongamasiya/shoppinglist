@@ -7,13 +7,11 @@ import { SearchControls } from "../components/SearchControls";
 import { ShoppingListsGrid } from "../components/ShoppingListsGrid";
 import { AddListDialog } from "../components/AddListDialog";
 import { EditListDialog } from "../components/EditListDialog";
+import { useAppSelector } from "../../hooks";
 
 type HomePageProps = {
-  user: User;
-  shoppingLists: ShoppingList[];
   onLogout: () => void;
   onNavigateToProfile: () => void;
-  onNavigateToListDetail: (listId: string) => void;
   onAddList: (name: string, category: string) => void;
   onUpdateList: (listId: string, name: string, category: string) => void;
   onDeleteList: (listId: string) => void;
@@ -24,11 +22,8 @@ type HomePageProps = {
 };
 
 export function HomePage({
-  user,
-  shoppingLists,
   onLogout,
   onNavigateToProfile,
-  onNavigateToListDetail,
   onAddList,
   onUpdateList,
   onDeleteList,
@@ -42,6 +37,12 @@ export function HomePage({
   const [editingList, setEditingList] = useState<ShoppingList | null>(null);
   const [newListName, setNewListName] = useState("");
   const [newListCategory, setNewListCategory] = useState("");
+
+  const user = useAppSelector((state) => state.userManagement);
+  const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>(user.shoppingLists);
+
+  
+
 
   // Filter and sort lists
   const filteredAndSortedLists = useMemo(() => {
@@ -142,7 +143,6 @@ export function HomePage({
           lists={filteredAndSortedLists}
           searchQuery={searchQuery}
           onCreateClick={() => setIsAddDialogOpen(true)}
-          onView={onNavigateToListDetail}
           onEdit={openEditDialog}
           onDelete={handleDeleteList}
         />

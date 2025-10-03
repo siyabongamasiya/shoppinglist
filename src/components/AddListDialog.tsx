@@ -1,4 +1,9 @@
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { addList } from "../features/shoppingListManagement";
+import { ShoppingList } from "../models/models";
 import "../styles/components/add-list-dialog.css";
+import { generateUniqueId, getTodayDateString } from "../../utilities";
+
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -19,6 +24,19 @@ export function AddListDialog({
   onConfirm,
 }: Props) {
   if (!open) return null;
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.userManagement);
+
+  const handleConfirm = (shoppingList: ShoppingList) => {
+    dispatch(
+      addList({
+        email: user.EmailAddress,
+        shoppingList,
+        onShoplistAdded:onConfirm,
+      })
+    );
+  };
+
   return (
     <div className="modal-overlay" onClick={() => onOpenChange(false)}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -31,7 +49,9 @@ export function AddListDialog({
 
         <div className="modal-body">
           <div className="form-group">
-            <label htmlFor="listName" className="form-label">List Name</label>
+            <label htmlFor="listName" className="form-label">
+              List Name
+            </label>
             <input
               id="listName"
               placeholder="e.g., Weekly Groceries"
@@ -42,7 +62,9 @@ export function AddListDialog({
           </div>
 
           <div className="form-group">
-            <label htmlFor="listCategory" className="form-label">Category</label>
+            <label htmlFor="listCategory" className="form-label">
+              Category
+            </label>
             <input
               id="listCategory"
               placeholder="e.g., Groceries, Hardware"
@@ -54,10 +76,28 @@ export function AddListDialog({
         </div>
 
         <div className="modal-footer">
-          <button className="btn btn-outline" onClick={() => onOpenChange(false)}>
+          <button
+            className="btn btn-outline"
+            onClick={() => onOpenChange(false)}
+          >
             Cancel
           </button>
-          <button className="btn" onClick={onConfirm}>Create List</button>
+          <button
+            className="btn"
+            onClick={() => {
+              handleConfirm(
+                new ShoppingList(
+                  generateUniqueId(),
+                  newListName,
+                  getTodayDateString(),
+                  newListCategory,
+                  []
+                )
+              );
+            }}
+          >
+            Create List
+          </button>
         </div>
       </div>
     </div>

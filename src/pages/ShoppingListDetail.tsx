@@ -12,12 +12,10 @@ import { toast } from "sonner";
 import "../styles/ShoppingListDetail.css";
 import "../styles/HomePage.css";
 import type { ShoppingList, ShoppingListItem, User } from "../models/models";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useNavigate, useParams } from "react-router-dom";
 
 type ShoppingListDetailProps = {
-  user: User;
-  list: ShoppingList;
-  onNavigateToHome: () => void;
-  onLogout: () => void;
   onAddItem: (listId: string, item: Omit<ShoppingListItem, "id">) => void;
   onUpdateItem: (
     listId: string,
@@ -28,10 +26,6 @@ type ShoppingListDetailProps = {
 };
 
 export function ShoppingListDetail({
-  user,
-  list,
-  onNavigateToHome,
-  onLogout,
   onAddItem,
   onUpdateItem,
   onDeleteItem,
@@ -39,12 +33,23 @@ export function ShoppingListDetail({
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ShoppingListItem | null>(null);
+  const { id } = useParams();
+
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.userManagement);
+
+  const getListById = (id: string): ShoppingList | undefined => {
+    return user.shoppingLists.find((list) => list.ShoppingListId === id);
+  };
 
   const [itemName, setItemName] = useState("");
   const [itemQuantity, setItemQuantity] = useState("1");
   const [itemCategory, setItemCategory] = useState("");
   const [itemNotes, setItemNotes] = useState("");
   const [itemImage, setItemImage] = useState("");
+  const navigate = useNavigate();
+  const list = getListById(id!);
+
 
   const resetForm = () => {
     setItemName("");
@@ -53,6 +58,8 @@ export function ShoppingListDetail({
     setItemNotes("");
     setItemImage("");
   };
+
+  
 
   const handleAddItem = () => {
     if (!itemName || !itemQuantity || !itemCategory) {
@@ -66,7 +73,7 @@ export function ShoppingListDetail({
       return;
     }
 
-    onAddItem(list.ShoppingListId, {
+    onAddItem(list!.ShoppingListId, {
       ShoppingListItemId: "",
       ShoppingListItemName: itemName,
       ShoppingListItemQuantity: quantity,
@@ -91,7 +98,7 @@ export function ShoppingListDetail({
       return;
     }
 
-    onUpdateItem(list.ShoppingListId, editingItem.ShoppingListItemId, {
+    onUpdateItem(list!.ShoppingListId, editingItem.ShoppingListItemId, {
       ShoppingListItemId: "",
       ShoppingListItemName: itemName,
       ShoppingListItemQuantity: quantity,
@@ -107,7 +114,7 @@ export function ShoppingListDetail({
 
   const handleDeleteItem = (itemId: string, itemName: string) => {
     if (confirm(`Remove "${itemName}" from the list?`)) {
-      onDeleteItem(list.ShoppingListId, itemId);
+      onDeleteItem(list!.ShoppingListId, itemId);
       toast.success("Item removed!");
     }
   };
@@ -123,7 +130,7 @@ export function ShoppingListDetail({
 
   const handleShareList = () => {
     // Mock share functionality
-    const shareUrl = `https://shopsmart.app/lists/${list.ShoppingListId}`;
+    const shareUrl = `https://shopsmart.app/lists/${list!.ShoppingListId}`;
     navigator.clipboard
       .writeText(shareUrl)
       .then(() => {
@@ -138,22 +145,22 @@ export function ShoppingListDetail({
     <div className="list-detail-page">
       <Navigation
         user={user}
-        onNavigateToHome={onNavigateToHome}
-        onLogout={onLogout}
+        onNavigateToHome={() => navigate("/")}
+        onLogout={() => navigate("/login")}
         currentPage="list-detail"
       />
 
       <div className="list-detail-container">
         {/* Header */}
-        <button className="back-button" onClick={onNavigateToHome}>
+        <button className="back-button" onClick={() => navigate("/")}>
           <ArrowLeft />
           Back to Lists
         </button>
 
         <div className="list-detail-header">
           <div className="list-detail-info">
-            <h1>{list.ShoppingListId}</h1>
-            <p>{list.ShoppingListcategory}</p>
+            <h1>{list!.ShoppingListId}</h1>
+            <p>{list!.ShoppingListcategory}</p>
           </div>
 
           <div className="list-detail-actions">
@@ -169,7 +176,7 @@ export function ShoppingListDetail({
         </div>
 
         {/* Items */}
-        {list.ShoppingListItems.length === 0 ? (
+        {list!.ShoppingListItems.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-content">
               <div className="empty-icon">
@@ -189,7 +196,7 @@ export function ShoppingListDetail({
           <>
             {/* Mobile Cards View */}
             <div className="mobile-view">
-              {list.ShoppingListItems.map((item) => (
+              {list!.ShoppingListItems.map((item) => (
                 <div key={item.ShoppingListItemId} className="item-card">
                   <div className="item-card-header">
                     <div className="item-card-title-row">
@@ -254,7 +261,7 @@ export function ShoppingListDetail({
                   </tr>
                 </thead>
                 <tbody>
-                  {list.ShoppingListItems.map((item) => (
+                  {list!.ShoppingListItems.map((item) => (
                     <tr key={item.ShoppingListItemId}>
                       <td>
                         <div className="table-cell-content">

@@ -1,4 +1,5 @@
 export class User {
+  id!: string;
   EmailAddress!: string;
   Password!: string;
   Name!: string;
@@ -7,12 +8,14 @@ export class User {
   shoppingLists: ShoppingList[] = [];
 
   constructor(
+    id: string="",
     email: string,
     password: string,
     name: string,
     surname: string,
     cellnumber: string
   ) {
+    this.id = id;
     this.EmailAddress = email;
     this.Password = password;
     this.Name = name;

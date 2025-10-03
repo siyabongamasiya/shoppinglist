@@ -18,25 +18,13 @@ import { Provider } from "react-redux";
 import { Toaster } from "sonner";
 
 export default function App() {
-  const user = new User(
-    "siya@gmail.com",
-    "password",
-    "siyabonga",
-    "khanyile",
-    "0676984906"
-  );
-  // Demo state; in a real app you'd fetch/store globally
-  const [shoppingLists, setShoppingLists] = React.useState<ShoppingList[]>([]);
 
   function HomeRoute() {
     const navigate = useNavigate();
     return (
       <HomePage
-        user={user}
-        shoppingLists={shoppingLists}
         onLogout={() => navigate("/login")}
         onNavigateToProfile={() => navigate("/profile")}
-        onNavigateToListDetail={(id) => navigate(`/lists/${id}`)}
         onAddList={(name, category) => {
           // no-op placeholder; wire to backend
         }}
@@ -54,7 +42,6 @@ export default function App() {
     const navigate = useNavigate();
     return (
       <ProfilePage
-        user={user}
         onUpdateUser={() => {}}
         onNavigateToHome={() => navigate("/")}
         onLogout={() => navigate("/login")}
@@ -83,20 +70,8 @@ export default function App() {
   }
 
   function ShoppingListDetailRoute() {
-    const navigate = useNavigate();
-    const { id } = useParams();
-    const list = shoppingLists.find(
-      (l) => String((l as any).ShoppingListId ?? (l as any).id) === id
-    );
-    if (!list) {
-      return <Navigate to="/" replace />;
-    }
     return (
       <ShoppingListDetail
-        user={user}
-        list={list}
-        onNavigateToHome={() => navigate("/")}
-        onLogout={() => navigate("/login")}
         onAddItem={() => {}}
         onUpdateItem={() => {}}
         onDeleteItem={() => {}}
@@ -113,7 +88,7 @@ export default function App() {
           <Route path="/profile" element={<ProfileRoute />} />
           <Route path="/login" element={<LoginRoute />} />
           <Route path="/register" element={<RegisterRoute />} />
-          <Route path="/lists/:id" element={<ShoppingListDetailRoute />} />
+          <Route path="/listItems/:id" element={<ShoppingListDetailRoute />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

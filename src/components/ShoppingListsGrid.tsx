@@ -1,12 +1,12 @@
 import { Calendar, Edit, Eye, Search, Trash2 } from "lucide-react";
 import "../styles/components/shopping-lists-grid.css";
 import type { ShoppingList } from "../models/models";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   lists: ShoppingList[];
   searchQuery: string;
   onCreateClick: () => void;
-  onView: (id: string) => void;
   onEdit: (list: ShoppingList) => void;
   onDelete: (id: string, name: string) => void;
 };
@@ -23,10 +23,11 @@ export function ShoppingListsGrid({
   lists,
   searchQuery,
   onCreateClick,
-  onView,
   onEdit,
   onDelete,
 }: Props) {
+  const navigate = useNavigate();
+
   if (!lists.length) {
     return (
       <div className="empty-state">
@@ -81,7 +82,9 @@ export function ShoppingListsGrid({
           <div className="list-card-footer">
             <button
               className="btn btn-outline"
-              onClick={() => onView(list.ShoppingListId)}
+              onClick={() => {
+                navigate(`/listItems/${list.ShoppingListId}`)
+              }}
             >
               <Eye />
               View

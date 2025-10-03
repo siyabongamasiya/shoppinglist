@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import "../styles/RegisterPage.css";
 import "../styles/globals.css";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { register, type RegisterArgs } from "../features/login";
+import { register, type RegisterArgs } from "../features/userManagement";
 import { useNavigate } from "react-router-dom";
 
 type RegisterPageProps = {

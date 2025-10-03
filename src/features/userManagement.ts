@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { User } from "../models/models";
 import axios from "axios";
 import { toast } from "sonner";
+import { generateUniqueId } from "../../utilities";
 
 interface UserState extends User {
   isLoading: boolean;
@@ -25,6 +26,7 @@ export interface RegisterArgs {
 
 
 const initialState: UserState = {
+  id: "",
   EmailAddress: "my email",
   Password: "12334456",
   Name: "siyabonga",
@@ -84,6 +86,7 @@ export const register = createAsyncThunk(
 
       // Create new user object
       const newUser: User = {
+        id:generateUniqueId()   ,
         EmailAddress: email,
         Password: password,
         Name: name,
@@ -120,6 +123,7 @@ export const userManagement = createSlice({
       })
       .addCase(login.fulfilled || register.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.id = action.payload.id
         state.EmailAddress = action.payload.EmailAddress;
         state.Password = action.payload.Password;
         state.Name = action.payload.Name;

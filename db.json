@@ -1,13 +1,35 @@
 {
   "users": [
     {
-      "id": "d32f",
+      "id": "id-1759491276081-3900",
       "EmailAddress": "siyabongakhanyile@gmail.com",
       "Password": "msiro@96",
       "Name": "siyabonga",
       "Surname": "khanyile",
-      "Cellnumber": "067 698 4906",
-      "shoppingLists": []
+      "Cellnumber": "0676984906",
+      "shoppingLists": [
+        {
+          "ShoppingListId": "id-1759493857769-3124",
+          "ShoppingListName": "weekly",
+          "ShoppingListDate": "2025-10-03",
+          "ShoppingListcategory": "groceries",
+          "ShoppingListItems": []
+        },
+        {
+          "ShoppingListId": "id-1759493954885-2501",
+          "ShoppingListName": "egfdf",
+          "ShoppingListDate": "2025-10-03",
+          "ShoppingListcategory": "dfdfdf",
+          "ShoppingListItems": []
+        },
+        {
+          "ShoppingListId": "id-1759494133980-2756",
+          "ShoppingListName": "monthly",
+          "ShoppingListDate": "2025-10-03",
+          "ShoppingListcategory": "hardware",
+          "ShoppingListItems": []
+        }
+      ]
     }
   ]
 }
