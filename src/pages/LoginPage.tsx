@@ -3,32 +3,35 @@ import { ShoppingCart } from 'lucide-react';
 import { toast } from 'sonner';
 import '../styles/LoginPage.css';
 import "../styles/globals.css"
+import {useAppSelector,useAppDispatch} from "../../hooks"
+import { login, type LoginArgs } from '../features/login';
+import { useNavigate } from 'react-router-dom';
 
 type LoginPageProps = {
   onLogin: (email: string, password: string) => void;
   onNavigateToRegister: () => void;
 };
 
-export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
+export function LoginPage({onNavigateToRegister }: LoginPageProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate()
+  
+  const user = useAppSelector((state) => state.userManagement);
+  const dispatch = useAppDispatch()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
+    if (!user.EmailAddress || !user.Password) {
       toast.error('Please fill in all fields');
       return;
     }
-
-    setIsLoading(true);
     
     // Simulate API call
     setTimeout(() => {
       toast.success('Login successful!');
-      onLogin(email, password);
-      setIsLoading(false);
+      dispatch(login({email,password,onNavigate : () => {navigate("/")}} as LoginArgs))
     }, 500);
   };
 
@@ -55,7 +58,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
+              disabled={user.isLoading}
               className="form-input"
             />
           </div>
@@ -68,7 +71,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
+              disabled={user.isLoading}
               className="form-input"
             />
           </div>
@@ -77,9 +80,9 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
             <button
               type="submit"
               className="btn"
-              disabled={isLoading}
+              disabled={user.isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Login'}
+              {user.isLoading ? 'Signing in...' : 'Login'}
             </button>
 
             <div className="login-footer-text">
@@ -88,7 +91,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
                 type="button"
                 className="btn-link"
                 onClick={onNavigateToRegister}
-                disabled={isLoading}
+                disabled={user.isLoading}
               >
                 Register here
               </button>

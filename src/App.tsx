@@ -13,6 +13,9 @@ import {
   Navigate,
 } from "react-router-dom";
 import React from "react";
+import { store } from "../store";
+import { Provider } from "react-redux";
+import { Toaster } from "sonner";
 
 export default function App() {
   const user = new User(
@@ -82,7 +85,9 @@ export default function App() {
   function ShoppingListDetailRoute() {
     const navigate = useNavigate();
     const { id } = useParams();
-    const list = shoppingLists.find((l) => String((l as any).ShoppingListId ?? (l as any).id) === id);
+    const list = shoppingLists.find(
+      (l) => String((l as any).ShoppingListId ?? (l as any).id) === id
+    );
     if (!list) {
       return <Navigate to="/" replace />;
     }
@@ -100,15 +105,18 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomeRoute />} />
-        <Route path="/profile" element={<ProfileRoute />} />
-        <Route path="/login" element={<LoginRoute />} />
-        <Route path="/register" element={<RegisterRoute />} />
-        <Route path="/lists/:id" element={<ShoppingListDetailRoute />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+      <Toaster position="bottom-right"/>
+        <Routes>
+          <Route path="/" element={<HomeRoute />} />
+          <Route path="/profile" element={<ProfileRoute />} />
+          <Route path="/login" element={<LoginRoute />} />
+          <Route path="/register" element={<RegisterRoute />} />
+          <Route path="/lists/:id" element={<ShoppingListDetailRoute />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }

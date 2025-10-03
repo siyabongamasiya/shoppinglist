@@ -1,8 +1,11 @@
-import { useState } from 'react';
-import { ShoppingCart } from 'lucide-react';
-import { toast } from 'sonner';
-import '../styles/RegisterPage.css';
-import "../styles/globals.css"
+import { useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
+import "../styles/RegisterPage.css";
+import "../styles/globals.css";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { register, type RegisterArgs } from "../features/login";
+import { useNavigate } from "react-router-dom";
 
 type RegisterPageProps = {
   onRegister: (data: {
@@ -15,41 +18,55 @@ type RegisterPageProps = {
   onNavigateToLogin: () => void;
 };
 
-export function RegisterPage({ onRegister, onNavigateToLogin }: RegisterPageProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [cellNumber, setCellNumber] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+export function RegisterPage({
+  onRegister,
+  onNavigateToLogin,
+}: RegisterPageProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [cellnumber, setCellNumber] = useState("");
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.userManagement);
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // if (!email || !password || !confirmPassword || !name || !surname || !cellNumber) {
-    //   toast.error('Please fill in all fields');
-    //   return;
-    // }
+    if (
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !name ||
+      !surname ||
+      !cellnumber
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
 
-    // if (password !== confirmPassword) {
-    //   toast.error('Passwords do not match');
-    //   return;
-    // }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
-    // if (password.length < 6) {
-    //   toast.error('Password must be at least 6 characters');
-    //   return;
-    // }
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
 
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      toast.success('Registration successful!');
-      onRegister({ email, password, name, surname, cellNumber });
-      setIsLoading(false);
-    }, 500);
+    dispatch(
+      register({
+        email,
+        password,
+        name,
+        surname,
+        cellnumber,
+        onNavigate: () => navigate("/"),
+      } as RegisterArgs)
+    );
   };
 
   return (
@@ -70,92 +87,100 @@ export function RegisterPage({ onRegister, onNavigateToLogin }: RegisterPageProp
           <div className="register-form">
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="name" className="form-label">Name</label>
+                <label htmlFor="name" className="form-label">
+                  Name
+                </label>
                 <input
                   id="name"
                   type="text"
                   placeholder="John"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  disabled={isLoading}
+                  disabled={user.isLoading}
                   className="form-input"
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="surname" className="form-label">Surname</label>
+                <label htmlFor="surname" className="form-label">
+                  Surname
+                </label>
                 <input
                   id="surname"
                   type="text"
                   placeholder="Doe"
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
-                  disabled={isLoading}
+                  disabled={user.isLoading}
                   className="form-input"
                 />
               </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="email" className="form-label">Email</label>
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
               <input
                 id="email"
                 type="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
+                disabled={user.isLoading}
                 className="form-input"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="cellNumber" className="form-label">Cell Number</label>
+              <label htmlFor="cellNumber" className="form-label">
+                Cell Number
+              </label>
               <input
                 id="cellNumber"
                 type="tel"
                 placeholder="+1234567890"
-                value={cellNumber}
+                value={cellnumber}
                 onChange={(e) => setCellNumber(e.target.value)}
-                disabled={isLoading}
+                disabled={user.isLoading}
                 className="form-input"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="password" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
               <input
                 id="password"
                 type="password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
+                disabled={user.isLoading}
                 className="form-input"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+              <label htmlFor="confirmPassword" className="form-label">
+                Confirm Password
+              </label>
               <input
                 id="confirmPassword"
                 type="password"
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={isLoading}
+                disabled={user.isLoading}
                 className="form-input"
               />
             </div>
           </div>
 
           <div className="register-footer">
-            <button
-              type="submit"
-              className="btn"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Creating account...' : 'Register'}
+            <button type="submit" className="btn" disabled={user.isLoading}>
+              {user.isLoading ? "Creating account..." : "Register"}
             </button>
 
             <div className="register-footer-text">
@@ -164,7 +189,7 @@ export function RegisterPage({ onRegister, onNavigateToLogin }: RegisterPageProp
                 type="button"
                 className="btn-link"
                 onClick={onNavigateToLogin}
-                disabled={isLoading}
+                disabled={user.isLoading}
               >
                 Login here
               </button>

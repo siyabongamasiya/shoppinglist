@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userManagementReducer from "./src/features/userManagement";
-import shoppingListManagentReducer from "./src/features/shoppingListManagement";
+import userManagementReducer from "./src/features/login"
 
 // ...
 
 export const store = configureStore({
   reducer: {
-    userManagement: userManagementReducer,
-    shoppingListManagent: shoppingListManagentReducer,
+    userManagement: userManagementReducer
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
