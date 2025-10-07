@@ -20,7 +20,6 @@ export default function App() {
     const navigate = useNavigate();
     return (
       <HomePage
-        onLogout={() => navigate("/login")}
         onNavigateToProfile={() => navigate("/profile")}
       />
     );

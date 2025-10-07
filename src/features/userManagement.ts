@@ -34,7 +34,7 @@ interface UpdatePasswordArgs {
   currentPassword: string;
   newPassword: string;
   confirmNewPassword: string;
-  onPasswordUpdated() : void
+  onPasswordUpdated(): void;
 }
 
 const initialState: UserState = {
@@ -78,7 +78,7 @@ export const updatePassword = createAsyncThunk(
       currentPassword,
       newPassword,
       confirmNewPassword,
-      onPasswordUpdated
+      onPasswordUpdated,
     }: UpdatePasswordArgs,
     { dispatch, getState, rejectWithValue }
   ) => {
@@ -118,7 +118,7 @@ export const updatePassword = createAsyncThunk(
           password: updatedUser.Password,
         })
       );
-      onPasswordUpdated()
+      onPasswordUpdated();
       toast.dismiss();
       toast.success("Password updated successfully");
       return updatedUser;
@@ -276,7 +276,6 @@ export const updateUserDetails = createAsyncThunk(
   }
 );
 
-
 export const userManagement = createSlice({
   name: "userManagement",
   initialState,
@@ -298,6 +297,7 @@ export const userManagement = createSlice({
         state.Cellnumber = action.payload.Cellnumber;
         state.isLoggedIn = true;
         state.shoppingLists = action.payload.shoppingLists;
+        saveToLocalStorage(state);
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
@@ -321,6 +321,7 @@ export const userManagement = createSlice({
         state.Cellnumber = action.payload.Cellnumber;
         state.isLoggedIn = true;
         state.shoppingLists = action.payload.shoppingLists;
+        saveToLocalStorage(state)
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
@@ -374,5 +375,18 @@ export const userManagement = createSlice({
       });
   },
 });
+
+const saveToLocalStorage = (state: UserState) => {
+  localStorage.setItem("user", JSON.stringify(state));
+};
+export const clearLocalStorage = () => {
+  localStorage.clear()
+};
+
+export const getUserFromLocalStorage = (): UserState | null => {
+  const storedUser = localStorage.getItem("user");
+  return storedUser ? (JSON.parse(storedUser) as UserState) : null;
+};
+
 
 export default userManagement.reducer;
