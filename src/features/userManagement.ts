@@ -6,6 +6,7 @@ import { generateUniqueId } from "../../utilities";
 
 export interface UserState extends User {
   isLoading: boolean;
+  isLoggedIn: boolean;
   error?: string;
 }
 
@@ -37,6 +38,7 @@ const initialState: UserState = {
   Cellnumber: "067 698 4906",
   shoppingLists: [],
   isLoading: false,
+  isLoggedIn: false,
   error: "",
 };
 
@@ -44,8 +46,6 @@ export const refreshUser = createAsyncThunk(
   "userManagement/refreshUser",
   async ({ email, password }: RefreshArgs, { rejectWithValue }) => {
     try {
-      toast.dismiss();
-      toast.message("Refreshing...");
       const response = await axios.get("http://localhost:3000/users");
 
       const user: User = response.data.find(
@@ -55,7 +55,6 @@ export const refreshUser = createAsyncThunk(
       if (!user) {
         return rejectWithValue("User not found or incorrect credentials");
       }
-      toast.dismiss();
       return user;
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch user");
@@ -137,6 +136,80 @@ export const register = createAsyncThunk(
   }
 );
 
+export const updateUserDetails = createAsyncThunk(
+  "userManagement/updateUserDetails",
+  async (
+    {
+      name,
+      surname,
+      email,
+      cellNumber,
+      onProfileUpdated,
+    }: {
+      name: string;
+      surname: string;
+      email: string;
+      cellNumber: string;
+      onProfileUpdated?: () => void;
+    },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      if (!email) {
+        return rejectWithValue("No logged-in user found");
+      }
+
+      toast.dismiss();
+      toast.loading("Updating profile...");
+
+      // Fetch the latest user data from backend
+      const response = await axios.get(
+        `http://localhost:3000/users?EmailAddress=${email}`
+      );
+      const currentUser: User = response.data[0];
+
+      if (!currentUser) {
+        toast.dismiss();
+        return rejectWithValue("User not found");
+      }
+
+      // Merge new data
+      const updatedUser = {
+        ...currentUser,
+        Name: name,
+        Surname: surname,
+        EmailAddress: email,
+        Cellnumber: cellNumber,
+      };
+
+      // Update on backend
+      await axios.patch(
+        `http://localhost:3000/users/${currentUser.id}`,
+        updatedUser
+      );
+
+      toast.dismiss();
+      toast.success("Profile updated successfully");
+
+      // Optional callback
+      if (onProfileUpdated) onProfileUpdated();
+
+      // Refresh Redux user state
+      dispatch(
+        refreshUser({
+          email: updatedUser.EmailAddress,
+          password: updatedUser.Password,
+        })
+      );
+      return updatedUser;
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error(error.message || "Failed to update profile");
+      return rejectWithValue(error.message || "Failed to update profile");
+    }
+  }
+);
+
 export const userManagement = createSlice({
   name: "userManagement",
   initialState,
@@ -156,6 +229,7 @@ export const userManagement = createSlice({
         state.Name = action.payload.Name;
         state.Surname = action.payload.Surname;
         state.Cellnumber = action.payload.Cellnumber;
+        state.isLoggedIn = true;
         state.shoppingLists = action.payload.shoppingLists;
       })
       .addCase(login.rejected, (state, action) => {
@@ -178,6 +252,7 @@ export const userManagement = createSlice({
         state.Name = action.payload.Name;
         state.Surname = action.payload.Surname;
         state.Cellnumber = action.payload.Cellnumber;
+        state.isLoggedIn = true;
         state.shoppingLists = action.payload.shoppingLists;
       })
       .addCase(register.rejected, (state, action) => {

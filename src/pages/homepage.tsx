@@ -2,51 +2,43 @@ import { useState, useMemo } from "react";
 import { Navigation } from "../components/Navigation";
 import { toast } from "sonner";
 import "../styles/HomePage.css";
-import type { ShoppingList, User } from "../models/models";
-import { SearchControls } from "../components/SearchControls";
+import type { ShoppingList } from "../models/models";
+import { SearchControls, type SortBy } from "../components/SearchControls";
 import { ShoppingListsGrid } from "../components/ShoppingListsGrid";
 import { AddListDialog } from "../components/AddListDialog";
 import { EditListDialog } from "../components/EditListDialog";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useNavigate } from "react-router-dom";
+import { editList } from "../features/shoppingListManagement";
 
 type HomePageProps = {
   onLogout: () => void;
   onNavigateToProfile: () => void;
-  onAddList: (name: string, category: string) => void;
-  onUpdateList: (listId: string, name: string, category: string) => void;
-  onDeleteList: (listId: string) => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  sortBy: "name" | "category" | "date";
-  setSortBy: (sortBy: "name" | "category" | "date") => void;
 };
 
-export function HomePage({
-  onLogout,
-  onNavigateToProfile,
-  onAddList,
-  onUpdateList,
-  onDeleteList,
-  searchQuery,
-  setSearchQuery,
-  sortBy,
-  setSortBy,
-}: HomePageProps) {
+export function HomePage({ onLogout, onNavigateToProfile }: HomePageProps) {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingList, setEditingList] = useState<ShoppingList | null>(null);
   const [newListName, setNewListName] = useState("");
   const [newListCategory, setNewListCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("name");
+  const [editedListId, setEditedListId] = useState("");
+
+  const navigate = useNavigate();
 
   const user = useAppSelector((state) => state.userManagement);
-  const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>(user.shoppingLists);
+  const dispatch = useAppDispatch();
 
-  
-
+  //take back to login if no user
+  if (!user.isLoggedIn) {
+    navigate("/login");
+  }
 
   // Filter and sort lists
   const filteredAndSortedLists = useMemo(() => {
-    let filtered = shoppingLists.filter(
+    let filtered = user.shoppingLists.filter(
       (list) =>
         list.ShoppingListName.toLowerCase().includes(
           searchQuery.toLowerCase()
@@ -70,15 +62,13 @@ export function HomePage({
     });
 
     return sorted;
-  }, [shoppingLists, searchQuery, sortBy]);
+  }, [user.shoppingLists, searchQuery, sortBy]);
 
   const handleAddList = () => {
     if (!newListName || !newListCategory) {
       toast.error("Please fill in all fields");
       return;
     }
-
-    onAddList(newListName, newListCategory);
     setNewListName("");
     setNewListCategory("");
     setIsAddDialogOpen(false);
@@ -91,7 +81,17 @@ export function HomePage({
       return;
     }
 
-    onUpdateList(editingList.ShoppingListId, newListName, newListCategory);
+    dispatch(
+      editList({
+        email: user.EmailAddress,
+        shoppingListId: editedListId,
+        updatedListData: {
+          ShoppingListName: newListName,
+          ShoppingListcategory: newListCategory,
+        }
+      })
+    );
+
     setEditingList(null);
     setNewListName("");
     setNewListCategory("");
@@ -101,7 +101,6 @@ export function HomePage({
 
   const handleDeleteList = (listId: string, listName: string) => {
     if (confirm(`Are you sure you want to delete "${listName}"?`)) {
-      onDeleteList(listId);
       toast.success("Shopping list deleted!");
     }
   };
@@ -133,8 +132,8 @@ export function HomePage({
         <SearchControls
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          sortBy={sortBy}
-          setSortBy={setSortBy as any}
+          sortBy={sortBy as SortBy}
+          setSortBy={setSortBy}
           onAddClick={() => setIsAddDialogOpen(true)}
         />
 
@@ -143,7 +142,10 @@ export function HomePage({
           lists={filteredAndSortedLists}
           searchQuery={searchQuery}
           onCreateClick={() => setIsAddDialogOpen(true)}
-          onEdit={openEditDialog}
+          onEdit={(list: ShoppingList) => {
+            setEditedListId(list.ShoppingListId);
+            openEditDialog(list);
+          }}
           onDelete={handleDeleteList}
         />
       </div>

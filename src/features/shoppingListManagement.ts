@@ -30,7 +30,7 @@ export const addList = createAsyncThunk(
   "shoppingListManagement/addList",
   async (
     { email, shoppingList, onShoplistAdded }: AddListArgs,
-    { rejectWithValue }
+    { dispatch,rejectWithValue }
   ) => {
     try {
       toast.dismiss();
@@ -62,6 +62,13 @@ export const addList = createAsyncThunk(
 
       onShoplistAdded();
 
+      dispatch(
+        refreshUser({
+          email: updatedUser.EmailAddress,
+          password: updatedUser.Password,
+        })
+      );
+
       return updatedUser;
     } catch (error: any) {
       toast.dismiss();
@@ -71,6 +78,204 @@ export const addList = createAsyncThunk(
   }
 );
 
+export const editList = createAsyncThunk(
+  "shoppingListManagement/editList",
+  async (
+    {
+      email,
+      shoppingListId,
+      updatedListData,
+    }: {
+      email: string;
+      shoppingListId: string;
+      updatedListData: Partial<ShoppingList>;
+    },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      toast.dismiss();
+      toast.loading("Updating shopping list...");
+
+      const response = await axios.get(
+        `http://localhost:3000/users?EmailAddress=${email}`
+      );
+      const user: User = response.data[0];
+
+      if (!user) {
+        toast.dismiss();
+        return rejectWithValue("User not found");
+      }
+
+      const updatedShoppingLists = user.shoppingLists.map((list) =>
+        list.ShoppingListId === shoppingListId
+          ? { ...list, ...updatedListData }
+          : list
+      );
+
+      const updatedUser = { ...user, shoppingLists: updatedShoppingLists };
+
+      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+
+      toast.dismiss();
+      toast.success("Shopping list updated successfully");
+
+      dispatch(
+        refreshUser({ email: user.EmailAddress, password: user.Password })
+      );
+
+      return updatedUser;
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error(error.message || "Failed to update shopping list");
+      return rejectWithValue(error.message || "Failed to update shopping list");
+    }
+  }
+);
+
+export const editListItem = createAsyncThunk(
+  "shoppingListManagement/editListItem",
+  async (
+    {
+      email,
+      shoppingListId,
+      shoppingListItemId,
+      updatedItemData,
+    }: {
+      email: string;
+      shoppingListId: string;
+      shoppingListItemId: string;
+      updatedItemData: Partial<ShoppingListItem>;
+    },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      toast.dismiss();
+      toast.loading("Updating shopping list item...");
+
+      // Fetch the user
+      const response = await axios.get(
+        `http://localhost:3000/users?EmailAddress=${email}`
+      );
+      const user: User = response.data[0];
+
+      if (!user) {
+        toast.dismiss();
+        return rejectWithValue("User not found");
+      }
+
+      // Update the specific shopping list item
+      const updatedShoppingLists = user.shoppingLists.map((list) => {
+        if (list.ShoppingListId !== shoppingListId) return list;
+
+        const updatedItems = list.ShoppingListItems.map((item) =>
+          item.ShoppingListItemId === shoppingListItemId
+            ? { ...item, ...updatedItemData }
+            : item
+        );
+
+        return { ...list, ShoppingListItems: updatedItems };
+      });
+
+      const updatedUser = { ...user, shoppingLists: updatedShoppingLists };
+
+      // PATCH the user with updated data
+      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+
+      toast.dismiss();
+      toast.success("Shopping list item updated successfully");
+
+      // Refresh user state
+      dispatch(
+        refreshUser({
+          email: user.EmailAddress,
+          password: user.Password,
+        })
+      );
+
+      return updatedUser;
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error(error.message || "Failed to update shopping list item");
+      return rejectWithValue(
+        error.message || "Failed to update shopping list item"
+      );
+    }
+  }
+);
+
+export const deleteListItem = createAsyncThunk(
+  "shoppingListManagement/deleteListItem",
+  async (
+    {
+      email,
+      shoppingListId,
+      shoppingListItemId,
+      onItemDeleted,
+    }: {
+      email: string;
+      shoppingListId: string;
+      shoppingListItemId: string;
+      onItemDeleted?: () => void;
+    },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      toast.dismiss();
+      toast.loading("Deleting item...");
+
+      // Fetch the user
+      const response = await axios.get(
+        `http://localhost:3000/users?EmailAddress=${email}`
+      );
+      const user: User = response.data[0];
+
+      if (!user) {
+        toast.dismiss();
+        return rejectWithValue("User not found");
+      }
+
+      // Update the specific shopping list by filtering out the item
+      const updatedShoppingLists = user.shoppingLists.map((list) => {
+        if (list.ShoppingListId !== shoppingListId) return list;
+
+        const filteredItems = list.ShoppingListItems.filter(
+          (item) => item.ShoppingListItemId !== shoppingListItemId
+        );
+
+        return { ...list, ShoppingListItems: filteredItems };
+      });
+
+      const updatedUser = { ...user, shoppingLists: updatedShoppingLists };
+
+      //  PATCH updated user
+      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+
+      toast.dismiss();
+      toast.success("Item deleted successfully");
+
+      // Optional callback
+      if (onItemDeleted) onItemDeleted();
+
+      //  Refresh user data in Redux
+      dispatch(
+        refreshUser({
+          email: user.EmailAddress,
+          password: user.Password,
+        })
+      );
+
+      return updatedUser;
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error(error.message || "Failed to delete item");
+      return rejectWithValue(error.message || "Failed to delete item");
+    }
+  }
+);
+
+
+
+
 export const addListItem = createAsyncThunk(
   "userManagement/addListItem",
   async (
@@ -78,7 +283,6 @@ export const addListItem = createAsyncThunk(
       email,
       shoppingListId,
       shoppingListItem,
-      onShoplistItemAdded,
     }: AddListItemArgs,
     { dispatch, rejectWithValue }
   ) => {

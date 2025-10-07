@@ -28,10 +28,7 @@ export function LoginPage({ onNavigateToRegister }: LoginPageProps) {
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      toast.success("Login successful!");
-      dispatch(
+    dispatch(
         login({
           email,
           password,
@@ -40,7 +37,6 @@ export function LoginPage({ onNavigateToRegister }: LoginPageProps) {
           },
         } as LoginArgs)
       );
-    }, 500);
   };
 
   return (

@@ -11,21 +11,20 @@ import {
 import { toast } from "sonner";
 import "../styles/ShoppingListDetail.css";
 import "../styles/HomePage.css";
-import type { ShoppingList, ShoppingListItem} from "../models/models";
+import type { ShoppingList, ShoppingListItem } from "../models/models";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
-import { addListItem } from "../features/shoppingListManagement";
+import {
+  addListItem,
+  deleteListItem,
+  editListItem,
+} from "../features/shoppingListManagement";
 import { generateUniqueId } from "../../utilities";
-import {type UserState } from "../features/userManagement";
+import { type UserState } from "../features/userManagement";
 
 export function ShoppingListDetail() {
   const dispatch = useAppDispatch();
   const user: UserState = useAppSelector((state) => state.userManagement);
-
-  const getListById = (id: string): ShoppingList | undefined => {
-    return user.shoppingLists.find((list) => list.ShoppingListId === id);
-  };
-
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -33,15 +32,16 @@ export function ShoppingListDetail() {
   const { id } = useParams();
   const list = user.shoppingLists.find((l) => l.ShoppingListId === id);
 
-  
-
-
   const [itemName, setItemName] = useState("");
   const [itemQuantity, setItemQuantity] = useState("1");
   const [itemCategory, setItemCategory] = useState("");
   const [itemNotes, setItemNotes] = useState("");
   const [itemImage, setItemImage] = useState("");
   const navigate = useNavigate();
+
+  const getItemsIfComingFromShare = () => {
+    //to do
+  }
 
   const addItem = () => {
     dispatch(
@@ -56,9 +56,7 @@ export function ShoppingListDetail() {
           ShoppingListItemNotes: itemNotes,
           ShoppingListitemImage: itemImage,
         },
-        onShoplistItemAdded: () => {
-          
-        },
+        onShoplistItemAdded: () => {},
       })
     );
   };
@@ -90,6 +88,10 @@ export function ShoppingListDetail() {
   };
 
   const handleUpdateItem = () => {
+    const email = user.EmailAddress;
+    const shoppingListId = id as string;
+    const shoppingListItemId = editingItem!.ShoppingListItemId;
+
     if (!editingItem || !itemName || !itemQuantity || !itemCategory) {
       toast.error("Please fill in required fields");
       return;
@@ -101,15 +103,33 @@ export function ShoppingListDetail() {
       return;
     }
 
+    dispatch(
+      editListItem({
+        email,
+        shoppingListId,
+        shoppingListItemId,
+        updatedItemData: {
+          ShoppingListItemName: itemName,
+          ShoppingListItemQuantity: itemQuantity,
+          ShoppingListItemNotes: itemNotes,
+          ShoppingListItemCategory: itemCategory,
+          ShoppingListitemImage: itemImage,
+        },
+      })
+    );
+
     resetForm();
     setEditingItem(null);
     setIsEditDialogOpen(false);
     toast.success("Item updated!");
   };
 
-  const handleDeleteItem = (itemId: string, itemName: string) => {
+  const handleDeleteItem = (shoppingListItemId: string, itemName: string) => {
+    const email = user.EmailAddress;
+    const shoppingListId = id as string;
+
     if (confirm(`Remove "${itemName}" from the list?`)) {
-      // onDeleteItem(list!.ShoppingListId, itemId);
+      dispatch(deleteListItem({ email, shoppingListId, shoppingListItemId }));
       toast.success("Item removed!");
     }
   };
@@ -125,7 +145,7 @@ export function ShoppingListDetail() {
 
   const handleShareList = () => {
     // Mock share functionality
-    const shareUrl = `https://shopsmart.app/lists/${list!.ShoppingListId}`;
+    const shareUrl = `http://localhost:5174/listItems/${list!.ShoppingListId}`;
     navigator.clipboard
       .writeText(shareUrl)
       .then(() => {

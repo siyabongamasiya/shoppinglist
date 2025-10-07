@@ -1,4 +1,3 @@
-import { ShoppingList, ShoppingListItem, User } from "./models/models";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage";
@@ -9,10 +8,8 @@ import {
   Routes,
   Route,
   useNavigate,
-  useParams,
   Navigate,
 } from "react-router-dom";
-import React from "react";
 import { store } from "../store";
 import { Provider } from "react-redux";
 import { Toaster } from "sonner";
@@ -25,15 +22,6 @@ export default function App() {
       <HomePage
         onLogout={() => navigate("/login")}
         onNavigateToProfile={() => navigate("/profile")}
-        onAddList={(name, category) => {
-          // no-op placeholder; wire to backend
-        }}
-        onUpdateList={() => {}}
-        onDeleteList={() => {}}
-        searchQuery=""
-        setSearchQuery={() => {}}
-        sortBy="date"
-        setSortBy={() => {}}
       />
     );
   }
