@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import "../styles/ProfilePage.css";
 import "../styles/HomePage.css";
 import type { User } from "../models/models";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { updateUserDetails } from "../features/userManagement";
 
 type ProfilePageProps = {
   onUpdateUser: (user: User) => void;
@@ -23,6 +24,7 @@ export function ProfilePage({
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useAppSelector((state) => state.userManagement);
+  const dispatch = useAppDispatch();
 
   // Edit profile state
   const [editName, setEditName] = useState(user.Name);
@@ -41,20 +43,17 @@ export function ProfilePage({
       return;
     }
 
-    setIsLoading(true);
-
-    setTimeout(() => {
-      onUpdateUser({
-        ...user,
-        Name: editName,
-        Surname: editSurname,
-        EmailAddress: editEmail,
-        Cellnumber: editCellNumber,
-      });
-      setIsEditDialogOpen(false);
-      setIsLoading(false);
-      toast.success("Profile updated successfully!");
-    }, 500);
+    dispatch(
+      updateUserDetails({
+        name: editName,
+        surname: editSurname,
+        email: editEmail,
+        cellNumber: editCellNumber,
+        onProfileUpdated: () => {
+          setIsEditDialogOpen(false);
+        },
+      })
+    );
   };
 
   const handleUpdatePassword = () => {
@@ -73,16 +72,7 @@ export function ProfilePage({
       return;
     }
 
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmNewPassword("");
-      setIsPasswordDialogOpen(false);
-      setIsLoading(false);
-      toast.success("Password updated successfully!");
-    }, 500);
+    //update logic lana
   };
 
   const openEditDialog = () => {
@@ -203,7 +193,7 @@ export function ProfilePage({
                     id="editName"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    disabled={isLoading}
+                    disabled={user.isLoading}
                     className="form-input"
                   />
                 </div>
@@ -216,7 +206,7 @@ export function ProfilePage({
                     id="editSurname"
                     value={editSurname}
                     onChange={(e) => setEditSurname(e.target.value)}
-                    disabled={isLoading}
+                    disabled={user.isLoading}
                     className="form-input"
                   />
                 </div>
@@ -231,7 +221,7 @@ export function ProfilePage({
                   type="email"
                   value={editEmail}
                   onChange={(e) => setEditEmail(e.target.value)}
-                  disabled={isLoading}
+                  disabled={user.isLoading}
                   className="form-input"
                 />
               </div>
@@ -245,7 +235,7 @@ export function ProfilePage({
                   type="tel"
                   value={editCellNumber}
                   onChange={(e) => setEditCellNumber(e.target.value)}
-                  disabled={isLoading}
+                  disabled={user.isLoading}
                   className="form-input"
                 />
               </div>
@@ -255,7 +245,7 @@ export function ProfilePage({
               <button
                 className="btn btn-outline"
                 onClick={() => setIsEditDialogOpen(false)}
-                disabled={isLoading}
+                disabled={user.isLoading}
               >
                 Cancel
               </button>
@@ -264,7 +254,7 @@ export function ProfilePage({
                 onClick={handleUpdateProfile}
                 disabled={isLoading}
               >
-                {isLoading ? "Updating..." : "Update Profile"}
+                {user.isLoading ? "Updating..." : "Update Profile"}
               </button>
             </div>
           </div>

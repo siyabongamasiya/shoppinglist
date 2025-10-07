@@ -3,7 +3,7 @@ import "../styles/components/search-controls.css";
 
 export type SortBy = "name" | "category" | "date";
 
-type Props = {
+export type Props = {
   searchQuery: string;
   setSearchQuery: (q: string) => void;
   sortBy: SortBy;
