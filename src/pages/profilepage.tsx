@@ -6,7 +6,7 @@ import "../styles/ProfilePage.css";
 import "../styles/HomePage.css";
 import type { User } from "../models/models";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { updateUserDetails } from "../features/userManagement";
+import { updatePassword, updateUserDetails } from "../features/userManagement";
 
 type ProfilePageProps = {
   onUpdateUser: (user: User) => void;
@@ -72,7 +72,23 @@ export function ProfilePage({
       return;
     }
 
+    // email,
+    //   currentPassword,
+    //   newPassword,
+    //   confirmNewPassword,
+
     //update logic lana
+    dispatch(
+      updatePassword({
+        email: user.EmailAddress,
+        currentPassword,
+        newPassword,
+        confirmNewPassword,
+        onPasswordUpdated: () => {
+          setIsPasswordDialogOpen(false);
+        },
+      })
+    );
   };
 
   const openEditDialog = () => {
@@ -284,7 +300,7 @@ export function ProfilePage({
                   placeholder="••••••••"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  disabled={isLoading}
+                  disabled={user.isLoading}
                   className="form-input"
                 />
               </div>
@@ -299,7 +315,7 @@ export function ProfilePage({
                   placeholder="••••••••"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  disabled={isLoading}
+                  disabled={user.isLoading}
                   className="form-input"
                 />
               </div>
@@ -314,7 +330,7 @@ export function ProfilePage({
                   placeholder="••••••••"
                   value={confirmNewPassword}
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
-                  disabled={isLoading}
+                  disabled={user.isLoading}
                   className="form-input"
                 />
               </div>
@@ -324,16 +340,16 @@ export function ProfilePage({
               <button
                 className="btn btn-outline"
                 onClick={() => setIsPasswordDialogOpen(false)}
-                disabled={isLoading}
+                disabled={user.isLoading}
               >
                 Cancel
               </button>
               <button
                 className="btn"
                 onClick={handleUpdatePassword}
-                disabled={isLoading}
+                disabled={user.isLoading}
               >
-                {isLoading ? "Updating..." : "Update Password"}
+                {user.isLoading ? "Updating..." : "Update Password"}
               </button>
             </div>
           </div>

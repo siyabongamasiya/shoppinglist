@@ -29,6 +29,14 @@ export interface RegisterArgs {
   onNavigate: () => void;
 }
 
+interface UpdatePasswordArgs {
+  email: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+  onPasswordUpdated() : void
+}
+
 const initialState: UserState = {
   id: "",
   EmailAddress: "my email",
@@ -58,6 +66,64 @@ export const refreshUser = createAsyncThunk(
       return user;
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch user");
+    }
+  }
+);
+
+export const updatePassword = createAsyncThunk(
+  "userManagement/updatePassword",
+  async (
+    {
+      email,
+      currentPassword,
+      newPassword,
+      confirmNewPassword,
+      onPasswordUpdated
+    }: UpdatePasswordArgs,
+    { dispatch, getState, rejectWithValue }
+  ) => {
+    const user = getState() as { userManagement: UserState };
+    // Validate current password
+    if (currentPassword !== user.userManagement.Password) {
+      return rejectWithValue("Current password is incorrect");
+    }
+
+    // Validate match
+    if (newPassword !== confirmNewPassword) {
+      return rejectWithValue("New passwords do not match");
+    }
+
+    try {
+      toast.dismiss();
+      toast.loading("Updating password...");
+
+      const response = await axios.get(
+        `http://localhost:3000/users?EmailAddress=${email}`
+      );
+      const currentUser: User = response.data[0];
+
+      const updatedUser = {
+        ...currentUser,
+        Password: newPassword,
+      };
+
+      await axios.patch(
+        `http://localhost:3000/users/${currentUser.id}`,
+        updatedUser
+      );
+
+      dispatch(
+        refreshUser({
+          email: updatedUser.EmailAddress,
+          password: updatedUser.Password,
+        })
+      );
+      onPasswordUpdated()
+      toast.dismiss();
+      toast.success("Password updated successfully");
+      return updatedUser;
+    } catch (error) {
+      return rejectWithValue("Failed to update password");
     }
   }
 );
@@ -210,6 +276,7 @@ export const updateUserDetails = createAsyncThunk(
   }
 );
 
+
 export const userManagement = createSlice({
   name: "userManagement",
   initialState,
@@ -278,6 +345,28 @@ export const userManagement = createSlice({
         state.shoppingLists = action.payload.shoppingLists;
       })
       .addCase(refreshUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+        toast.dismiss();
+        toast.error(action.payload as string);
+      })
+
+      // update password
+      .addCase(updatePassword.pending, (state) => {
+        state.isLoading = true;
+        state.error = undefined;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.id = action.payload.id;
+        state.EmailAddress = action.payload.EmailAddress;
+        state.Password = action.payload.Password;
+        state.Name = action.payload.Name;
+        state.Surname = action.payload.Surname;
+        state.Cellnumber = action.payload.Cellnumber;
+        state.shoppingLists = action.payload.shoppingLists;
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
         toast.dismiss();
