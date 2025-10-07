@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": "id-1759844702300-1843",
+      "EmailAddress": "siyabongakhanyile@gmail.com",
+      "Password": "masiya@96",
+      "Name": "Siyabonga",
+      "Surname": "Khanyile",
+      "Cellnumber": "0676984906",
+      "shoppingLists": [
+        {
+          "ShoppingListId": "id-1759844729742-231",
+          "ShoppingListName": "weekly groceries",
+          "ShoppingListDate": "2025-10-07",
+          "ShoppingListcategory": "Groceries",
+          "ShoppingListItems": [
+            {
+              "ShoppingListItemId": "id-1759844755090-4809",
+              "ShoppingListItemName": "milk",
+              "ShoppingListItemQuantity": "3",
+              "ShoppingListItemCategory": "dairy",
+              "ShoppingListItemNotes": "thenga espa",
+              "ShoppingListitemImage": "\"\""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
