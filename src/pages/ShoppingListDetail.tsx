@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner";
 import "../styles/ShoppingListDetail.css";
 import "../styles/HomePage.css";
-import type { ShoppingList, ShoppingListItem } from "../models/models";
+import type {ShoppingListItem } from "../models/models";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import {

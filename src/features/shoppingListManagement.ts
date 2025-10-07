@@ -78,6 +78,67 @@ export const addList = createAsyncThunk(
   }
 );
 
+export const deleteList = createAsyncThunk(
+  "shoppingListManagement/deleteList",
+  async (
+    {
+      email,
+      shoppingListId
+    }: {
+      email: string;
+      shoppingListId: string;
+    },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      toast.dismiss();
+      toast.loading("Deleting shopping list...");
+
+      // 1. Fetch user by email
+      const response = await axios.get(
+        `http://localhost:3000/users?EmailAddress=${email}`
+      );
+      const user: User = response.data[0];
+
+      if (!user) {
+        toast.dismiss();
+        return rejectWithValue("User not found");
+      }
+
+      // 2. Remove the targeted shopping list
+      const updatedShoppingLists = user.shoppingLists.filter(
+        (list) => list.ShoppingListId !== shoppingListId
+      );
+
+      const updatedUser = {
+        ...user,
+        shoppingLists: updatedShoppingLists,
+      };
+
+      // 3. Update user data on backend
+      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+
+      // 4. Refresh Redux user state
+      dispatch(
+        refreshUser({
+          email: updatedUser.EmailAddress,
+          password: updatedUser.Password,
+        })
+      );
+
+      toast.dismiss();
+      toast.success("Shopping list deleted successfully");
+
+      return updatedUser;
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error(error.message || "Failed to delete shopping list");
+      return rejectWithValue(error.message || "Failed to delete shopping list");
+    }
+  }
+);
+
+
 export const editList = createAsyncThunk(
   "shoppingListManagement/editList",
   async (
@@ -336,14 +397,6 @@ export const addListItem = createAsyncThunk(
       return rejectWithValue(error.message || "Failed to add list item");
     }
   }
-);
-export const deleteList = createAsyncThunk(
-  "addList",
-  async (shoppingList: ShoppingList) => {}
-);
-export const shareList = createAsyncThunk(
-  "addList",
-  async (shoppingList: ShoppingList) => {}
 );
 
 export const shoppingListManagent = createSlice({

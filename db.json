@@ -37,27 +37,6 @@
           "ShoppingListDate": "2025-10-03",
           "ShoppingListcategory": "hardware thf",
           "ShoppingListItems": []
-        },
-        {
-          "ShoppingListId": "id-1759833455505-3812",
-          "ShoppingListName": "some list",
-          "ShoppingListDate": "2025-10-07",
-          "ShoppingListcategory": "some category",
-          "ShoppingListItems": []
-        },
-        {
-          "ShoppingListId": "id-1759833614046-8921",
-          "ShoppingListName": "other",
-          "ShoppingListDate": "2025-10-07",
-          "ShoppingListcategory": "ertg",
-          "ShoppingListItems": []
-        },
-        {
-          "ShoppingListId": "id-1759833636160-3002",
-          "ShoppingListName": "sfs",
-          "ShoppingListDate": "2025-10-07",
-          "ShoppingListcategory": "sfsf",
-          "ShoppingListItems": []
         }
       ]
     }

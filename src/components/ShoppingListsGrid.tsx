@@ -2,13 +2,14 @@ import { Calendar, Edit, Eye, Search, Trash2 } from "lucide-react";
 import "../styles/components/shopping-lists-grid.css";
 import type { ShoppingList } from "../models/models";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { deleteList } from "../features/shoppingListManagement";
 
 type Props = {
   lists: ShoppingList[];
   searchQuery: string;
   onCreateClick: () => void;
   onEdit: (list: ShoppingList) => void;
-  onDelete: (id: string, name: string) => void;
 };
 
 function formatDate(date: Date) {
@@ -24,9 +25,21 @@ export function ShoppingListsGrid({
   searchQuery,
   onCreateClick,
   onEdit,
-  onDelete,
 }: Props) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.userManagement);
+
+
+
+  const handleDeleteList = (list : ShoppingList) => {
+    if (confirm(`Are you sure you want to delete "${list.ShoppingListName}"?`)) {
+      dispatch(deleteList({
+        email: user.EmailAddress,
+        shoppingListId: list.ShoppingListId
+      }))
+    }
+  };
 
   if (!lists.length) {
     return (
@@ -83,7 +96,7 @@ export function ShoppingListsGrid({
             <button
               className="btn btn-outline"
               onClick={() => {
-                navigate(`/listItems/${list.ShoppingListId}`)
+                navigate(`/listItems/${list.ShoppingListId}`);
               }}
             >
               <Eye />
@@ -95,7 +108,7 @@ export function ShoppingListsGrid({
             <button
               className="btn-ghost btn-sm"
               onClick={() =>
-                onDelete(list.ShoppingListId, list.ShoppingListName)
+                handleDeleteList(list)
               }
             >
               <Trash2 />

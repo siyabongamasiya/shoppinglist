@@ -99,12 +99,6 @@ export function HomePage({ onLogout, onNavigateToProfile }: HomePageProps) {
     toast.success("Shopping list updated!");
   };
 
-  const handleDeleteList = (listId: string, listName: string) => {
-    if (confirm(`Are you sure you want to delete "${listName}"?`)) {
-      toast.success("Shopping list deleted!");
-    }
-  };
-
   const openEditDialog = (list: ShoppingList) => {
     setEditingList(list);
     setNewListName(list.ShoppingListName);
@@ -146,7 +140,6 @@ export function HomePage({ onLogout, onNavigateToProfile }: HomePageProps) {
             setEditedListId(list.ShoppingListId);
             openEditDialog(list);
           }}
-          onDelete={handleDeleteList}
         />
       </div>
 
