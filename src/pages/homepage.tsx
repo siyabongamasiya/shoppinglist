@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Navigation } from "../components/Navigation";
 import { toast } from "sonner";
 import "../styles/HomePage.css";
@@ -10,13 +10,18 @@ import { EditListDialog } from "../components/EditListDialog";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { editList } from "../features/shoppingListManagement";
+import {
+  clearLocalStorage,
+  getUserFromLocalStorage,
+  login,
+  refreshUser,
+} from "../features/userManagement";
 
 type HomePageProps = {
-  onLogout: () => void;
   onNavigateToProfile: () => void;
 };
 
-export function HomePage({ onLogout, onNavigateToProfile }: HomePageProps) {
+export function HomePage({ onNavigateToProfile }: HomePageProps) {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingList, setEditingList] = useState<ShoppingList | null>(null);
@@ -28,12 +33,19 @@ export function HomePage({ onLogout, onNavigateToProfile }: HomePageProps) {
 
   const navigate = useNavigate();
 
-  const user = useAppSelector((state) => state.userManagement);
+  let user = useAppSelector((state) => state.userManagement);
   const dispatch = useAppDispatch();
 
   //take back to login if no user
-  if (!user.isLoggedIn) {
+  if (getUserFromLocalStorage() === null) {
     navigate("/login");
+  } else {
+    user = getUserFromLocalStorage()!;
+    useEffect(() => {
+      dispatch(
+        refreshUser({ email: user.EmailAddress, password: user.Password })
+      );
+    }, []);
   }
 
   // Filter and sort lists
@@ -88,7 +100,7 @@ export function HomePage({ onLogout, onNavigateToProfile }: HomePageProps) {
         updatedListData: {
           ShoppingListName: newListName,
           ShoppingListcategory: newListCategory,
-        }
+        },
       })
     );
 
@@ -112,7 +124,10 @@ export function HomePage({ onLogout, onNavigateToProfile }: HomePageProps) {
         user={user}
         onNavigateToHome={() => {}}
         onNavigateToProfile={onNavigateToProfile}
-        onLogout={onLogout}
+        onLogout={() => {
+          clearLocalStorage();
+          navigate("/login");
+        }}
         currentPage="home"
       />
 
