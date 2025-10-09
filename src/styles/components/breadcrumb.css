@@ -1,0 +1,7 @@
+.breadcrumb-list { display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:14px; color: var(--muted-foreground,#6b7280); }
+.breadcrumb-item { display:inline-flex; align-items:center; gap:6px; }
+.breadcrumb-link { transition: color 0.15s ease; }
+.breadcrumb-link:hover { color: var(--foreground,#111827); }
+.breadcrumb-page { color: var(--foreground,#111827); font-weight: 500; }
+.breadcrumb-separator svg { width: 14px; height:14px; }
+.breadcrumb-ellipsis { display:flex; width:36px; height:36px; align-items:center; justify-content:center; }

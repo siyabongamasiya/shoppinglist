@@ -1,0 +1,24 @@
+.input {
+  display: flex;
+  height: 36px;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--input-border, #e5e7eb);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 14px;
+  background: var(--input-background, #ffffff);
+  color: var(--input-foreground, #111827);
+  transition: box-shadow 0.15s ease, color 0.15s ease;
+}
+.input::placeholder {
+  color: var(--muted-foreground, #6b7280);
+}
+.input:focus-visible {
+  outline: 3px solid rgba(59,130,246,0.5);
+  outline-offset: 2px;
+}
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

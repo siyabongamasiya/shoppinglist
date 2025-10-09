@@ -1,0 +1,6 @@
+.pagination { display:flex; justify-content:center; }
+.pagination-content { display:flex; flex-direction:row; align-items:center; gap:4px; }
+.pagination-link { display:inline-flex; align-items:center; justify-content:center; gap:4px; border-radius:6px; padding:6px 10px; font-size:14px; }
+.pagination-link[data-active="true"] { border:1px solid var(--input-border,#e5e7eb); background: transparent; }
+.pagination-link:not([data-active="true"]) { background: transparent; }
+.pagination-ellipsis { display:flex; width:36px; height:36px; align-items:center; justify-content:center; }

@@ -1,0 +1,10 @@
+.input-otp { }
+.input-otp-container { display:flex; align-items:center; gap:8px; }
+.input-otp-group { display:flex; align-items:center; gap:4px; }
+.input-otp-slot { position:relative; display:flex; align-items:center; justify-content:center; width:36px; height:36px; font-size:14px; border:1px solid var(--input-border,#e5e7eb); background: var(--input-background,#fff); border-right-width:1px; }
+.input-otp-slot:first-child { border-top-left-radius:6px; border-bottom-left-radius:6px; border-left-width:1px; }
+.input-otp-slot:last-child { border-top-right-radius:6px; border-bottom-right-radius:6px; }
+.input-otp-slot[data-active="true"] { z-index:10; outline: 3px solid rgba(59,130,246,0.5); outline-offset: 0; border-color: var(--ring,#3b82f6); }
+.input-otp-caret { width:1px; height:16px; background: var(--foreground,#111827); animation: caret-blink 1s steps(1) infinite; }
+@keyframes caret-blink { 50% { opacity: 0; } }
+.input-otp-separator { display:flex; align-items:center; justify-content:center; }

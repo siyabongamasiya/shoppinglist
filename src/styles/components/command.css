@@ -1,0 +1,11 @@
+.command { display:flex; flex-direction:column; width:100%; height:100%; overflow:hidden; border:1px solid var(--border,#e5e7eb); border-radius:8px; background:var(--popover,#fff); color:var(--popover-foreground,#111827); }
+.command-input-wrapper { display:flex; align-items:center; gap:8px; height:48px; border-bottom:1px solid var(--border,#e5e7eb); padding:0 12px; }
+.command-input { flex:1 1 auto; height:40px; background:transparent; outline: none; }
+.command-list { max-height:300px; overflow-x:hidden; overflow-y:auto; scroll-padding-block: 4px; }
+.command-empty { padding: 24px 0; text-align:center; font-size:14px; }
+.command-group { overflow:hidden; padding:4px; }
+.command-group [cmdk-group-heading] { color: var(--muted-foreground,#6b7280); padding: 4px 8px; font-size:12px; font-weight:600; }
+.command-item { display:flex; align-items:center; gap:8px; padding:6px 8px; font-size:14px; border-radius:6px; cursor: default; user-select:none; }
+.command-item[data-selected="true"] { background: var(--accent,#f5f6f8); color: var(--accent-foreground,#111827); }
+.command-shortcut { margin-left:auto; font-size:12px; letter-spacing:0.08em; color: var(--muted-foreground,#6b7280); }
+.command-separator { height:1px; background: var(--border,#e5e7eb); margin: 4px 0; }

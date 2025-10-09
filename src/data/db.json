@@ -1,0 +1,101 @@
+{
+  "users": [
+    {
+      "id": "id-1759911559574-9397",
+      "EmailAddress": "siyabonga@gmail.com",
+      "Password": "U2FsdGVkX1/imcWpEkvtOea2yzBIZ5XSMgUCIyLJLIg=",
+      "Name": "Siyabonga",
+      "Surname": "Khanyile",
+      "Cellnumber": "067 698 4906",
+      "shoppingLists": [
+        {
+          "ShoppingListId": "id-1759911574104-2794",
+          "ShoppingListName": "weekly",
+          "ShoppingListDate": "2025-10-08",
+          "ShoppingListcategory": "groceries",
+          "ShoppingListItems": [
+            {
+              "ShoppingListItemId": "id-1759911732656-202",
+              "ShoppingListItemName": "Milk",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "Dairy",
+              "ShoppingListItemNotes": "Thenga e shoprite",
+              "ShoppingListitemImage": "data:image/jpeg;base64,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"
+            },
+            {
+              "ShoppingListItemId": "id-1759994438088-1727",
+              "ShoppingListItemName": "sando",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "hardware",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            },
+            {
+              "ShoppingListItemId": "id-1759994458538-4475",
+              "ShoppingListItemName": "powder",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "groceries",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            }
+          ]
+        },
+        {
+          "ShoppingListId": "id-1759911591843-4447",
+          "ShoppingListName": "monthly",
+          "ShoppingListDate": "2025-10-08",
+          "ShoppingListcategory": "groceries",
+          "ShoppingListItems": []
+        },
+        {
+          "ShoppingListId": "id-1759995745698-9787",
+          "ShoppingListName": "Building material",
+          "ShoppingListDate": "2025-10-09",
+          "ShoppingListcategory": "hardware",
+          "ShoppingListItems": [
+            {
+              "ShoppingListItemId": "id-1759995772781-3259",
+              "ShoppingListItemName": "sando",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "tools",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            },
+            {
+              "ShoppingListItemId": "id-1759995798424-7774",
+              "ShoppingListItemName": "bricks",
+              "ShoppingListItemQuantity": "200",
+              "ShoppingListItemCategory": "building",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            },
+            {
+              "ShoppingListItemId": "id-1759995821179-999",
+              "ShoppingListItemName": "roof tiles",
+              "ShoppingListItemQuantity": "300",
+              "ShoppingListItemCategory": "building",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            },
+            {
+              "ShoppingListItemId": "id-1759995958628-8144",
+              "ShoppingListItemName": "grinder",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "tools",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            },
+            {
+              "ShoppingListItemId": "id-1759996070034-5998",
+              "ShoppingListItemName": "fence",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "biying",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

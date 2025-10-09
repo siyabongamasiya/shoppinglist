@@ -1,0 +1,6 @@
+.resizable-panel-group { display:flex; width:100%; height:100%; }
+.resizable-panel-group[data-panel-group-direction="vertical"] { flex-direction: column; }
+
+.resizable-handle { position: relative; display:flex; align-items:center; justify-content:center; width:1px; background: var(--border,#e5e7eb); }
+.resizable-handle[data-panel-group-direction="vertical"] { width:100%; height:1px; }
+.resizable-thumb { background: var(--border,#e5e7eb); border-radius:4px; display:flex; align-items:center; justify-content:center; width:12px; height:16px; z-index:10; border:1px solid var(--border,#e5e7eb); }

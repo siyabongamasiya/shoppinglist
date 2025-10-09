@@ -1,0 +1,6 @@
+.scroll-area { position: relative; }
+.scroll-area-viewport { width: 100%; height: 100%; border-radius: inherit; outline: none; }
+.scroll-area-scrollbar { display: flex; user-select: none; touch-action: none; padding: 1px; transition: background-color 0.15s ease; }
+.scroll-area-scrollbar[data-orientation="vertical"] { height: 100%; width: 10px; border-left: 1px solid transparent; }
+.scroll-area-scrollbar[data-orientation="horizontal"] { width: 100%; height: 10px; flex-direction: column; border-top: 1px solid transparent; }
+.scroll-area-thumb { background: var(--border,#e5e7eb); border-radius: 9999px; flex: 1; position: relative; }

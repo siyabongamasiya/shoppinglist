@@ -1,0 +1,5 @@
+.tabs { display: flex; flex-direction: column; gap: 8px; }
+.tabs-list { display: inline-flex; align-items: center; justify-content: center; height: 36px; gap: 4px; background: var(--muted, #f3f4f6); color: var(--muted-foreground, #6b7280); padding: 3px; border-radius: 12px; }
+.tabs-trigger { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 4px 8px; font-size: 14px; font-weight: 500; white-space: nowrap; border: 1px solid transparent; border-radius: 12px; }
+.tabs-trigger[data-state="active"] { background: var(--card, #fff); color: var(--foreground, #111827); border-color: var(--input, #e5e7eb); }
+.tabs-content { flex: 1; outline: none; }

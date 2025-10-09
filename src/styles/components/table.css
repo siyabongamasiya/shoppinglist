@@ -1,0 +1,10 @@
+.table-container { position: relative; width: 100%; overflow-x: auto; }
+.table { width: 100%; caption-side: bottom; font-size: 14px; border-collapse: collapse; }
+.table-header tr { border-bottom: 1px solid var(--border, #e5e7eb); }
+.table-body tr:last-child { border-bottom: none; }
+.table-footer { border-top: 1px solid var(--border, #e5e7eb); font-weight: 500; background: rgba(243,244,246,0.5); }
+.table-row { border-bottom: 1px solid var(--border, #e5e7eb); transition: background-color 0.15s ease; }
+.table-row:hover, .table-row[data-state="selected"] { background: rgba(243,244,246,0.5); }
+.table-head { color: var(--foreground, #111827); height: 40px; padding: 0 8px; text-align: left; vertical-align: middle; font-weight: 600; white-space: nowrap; }
+.table-cell { padding: 8px; vertical-align: middle; white-space: nowrap; }
+.table-caption { color: var(--muted-foreground, #6b7280); margin-top: 16px; font-size: 14px; }

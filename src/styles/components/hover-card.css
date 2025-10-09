@@ -1,0 +1,1 @@
+.hover-card-content { z-index: 50; width: 256px; border:1px solid var(--border,#e5e7eb); background: var(--popover,#fff); color: var(--popover-foreground,#111827); border-radius: 8px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
