@@ -186,6 +186,7 @@ export function ShoppingListDetail() {
     <div className="list-detail-page">
       <Navigation
         user={user}
+        hasNavButtons={true}
         onNavigateToHome={() => navigate("/")}
         onLogout={() => navigate("/login")}
         currentPage="list-detail"

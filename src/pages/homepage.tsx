@@ -122,6 +122,7 @@ export function HomePage({ onNavigateToProfile }: HomePageProps) {
     <div className="home-page">
       <Navigation
         user={user}
+        hasNavButtons={true}
         onNavigateToHome={() => {}}
         onNavigateToProfile={onNavigateToProfile}
         onLogout={() => {
