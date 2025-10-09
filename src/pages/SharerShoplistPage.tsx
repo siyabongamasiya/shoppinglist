@@ -4,33 +4,44 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { Navigation } from "../components/Navigation";
 import "../styles/ShoppingListDetail.css";
 import "../styles/HomePage.css";
-import { getSharerList, type SharerListState } from "../features/sharerListmanagement";
+import {
+  getListFromLocalStorage,
+  getSharerList,
+  saveToLocalStorage,
+  type SharerListState,
+} from "../features/sharerListmanagement";
 import { useEffect } from "react";
 import { decrypt } from "../features/userManagement";
 
 export function SharerShopListPage() {
-  const sharerShopList: SharerListState = useAppSelector(
+  let sharerShopListState: SharerListState = useAppSelector(
     (state) => state.sharerListManagement
   );
-  const dispatch = useAppDispatch()
-  
 
-  const navigate = useNavigate()
-  const {email,id} = useParams();
-  
-  const decryptedEmail = decrypt(email!)
-  console.log(decryptedEmail,id)
+  sharerShopListState.ShoppingListItems.length === 0 ? saveToLocalStorage(sharerShopListState) : "";
+
+  if(sharerShopListState.ShoppingListItems.length === 0){
+    sharerShopListState = getListFromLocalStorage()!;
+  }
+
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+
+  const { email, id } = useParams();
+
+  const decryptedEmail = decrypt(email!);
+
   useEffect(() => {
-    dispatch(getSharerList({email : decryptedEmail!,shoppingListId:id}))
-  },[])
-
-
+    dispatch(getSharerList({ email: decryptedEmail!, shoppingListId: id }));
+  }, []);
 
   return (
     <div className="list-detail-page">
       {/* Navigation */}
       <Navigation
         user={null}
+        hasNavButtons={false}
         onNavigateToHome={() => navigate("/")}
         onLogout={() => navigate("/login")}
         currentPage="list-detail"
@@ -38,23 +49,18 @@ export function SharerShopListPage() {
 
       <div className="list-detail-container">
         {/* Header */}
-        <button className="back-button" onClick={() => navigate("/")}>
-          <ArrowLeft />
-          Back to Lists
-        </button>
-
         <div className="list-detail-header">
           <div className="list-detail-info">
-            <h1>{sharerShopList.ShoppingListName || "Shared Shopping List"}</h1>
-            <p>{sharerShopList.ShoppingListcategory || "No category"}</p>
+            <h1>{sharerShopListState.ShoppingListName || "Shared Shopping List"}</h1>
+            <p>{sharerShopListState.ShoppingListcategory || "No category"}</p>
             <p className="list-date">
-              {sharerShopList.ShoppingListDate || "No date available"}
+              {sharerShopListState.ShoppingListDate || "No date available"}
             </p>
           </div>
         </div>
 
         {/* Items */}
-        {sharerShopList.ShoppingListItems.length === 0 ? (
+        {sharerShopListState.ShoppingListItems.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-content">
               <div className="empty-icon">🛒</div>
@@ -68,7 +74,7 @@ export function SharerShopListPage() {
           <>
             {/* Mobile Cards View */}
             <div className="mobile-view">
-              {sharerShopList.ShoppingListItems.map((item) => (
+              {sharerShopListState.ShoppingListItems.map((item) => (
                 <div key={item.ShoppingListItemId} className="item-card">
                   <div className="item-card-header">
                     <div className="item-card-title-row">
@@ -107,7 +113,7 @@ export function SharerShopListPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {sharerShopList.ShoppingListItems.map((item) => (
+                  {sharerShopListState.ShoppingListItems.map((item) => (
                     <tr key={item.ShoppingListItemId}>
                       <td>{item.ShoppingListItemName}</td>
                       <td>{item.ShoppingListItemQuantity}</td>

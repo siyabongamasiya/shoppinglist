@@ -37,6 +37,22 @@
               "ShoppingListItemCategory": "groceries",
               "ShoppingListItemNotes": "",
               "ShoppingListitemImage": ""
+            },
+            {
+              "ShoppingListItemId": "id-1759997452982-9671",
+              "ShoppingListItemName": "juice",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "liquids",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            },
+            {
+              "ShoppingListItemId": "id-1759997485090-3381",
+              "ShoppingListItemName": "corn flackes",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "break fast",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
             }
           ]
         },
@@ -56,7 +72,7 @@
             {
               "ShoppingListItemId": "id-1759995772781-3259",
               "ShoppingListItemName": "sando",
-              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemQuantity": "2",
               "ShoppingListItemCategory": "tools",
               "ShoppingListItemNotes": "",
               "ShoppingListitemImage": ""
