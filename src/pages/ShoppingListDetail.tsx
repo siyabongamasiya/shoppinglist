@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigation } from "../components/Navigation";
 import {
   Plus,
@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner";
 import "../styles/ShoppingListDetail.css";
 import "../styles/HomePage.css";
-import type {ShoppingListItem } from "../models/models";
+import type { ShoppingListItem } from "../models/models";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -20,16 +20,19 @@ import {
   editListItem,
 } from "../features/shoppingListManagement";
 import { generateUniqueId } from "../../utilities";
-import { type UserState } from "../features/userManagement";
+import { decrypt, encrypt, type UserState } from "../features/userManagement";
+import { SearchControls, type SortBy } from "../components/SearchControls";
 
 export function ShoppingListDetail() {
   const dispatch = useAppDispatch();
   const user: UserState = useAppSelector((state) => state.userManagement);
 
+  const navigate = useNavigate();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ShoppingListItem | null>(null);
   const { id } = useParams();
+
   const list = user.shoppingLists.find((l) => l.ShoppingListId === id);
 
   const [itemName, setItemName] = useState("");
@@ -37,11 +40,31 @@ export function ShoppingListDetail() {
   const [itemCategory, setItemCategory] = useState("");
   const [itemNotes, setItemNotes] = useState("");
   const [itemImage, setItemImage] = useState("");
-  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("name");
 
-  const getItemsIfComingFromShare = () => {
-    //to do
-  }
+  // Filter and sort lists
+    const filteredAndSortedListitems = useMemo(() => {
+      let filtered = list!.ShoppingListItems.filter(
+        (list) =>
+          list.ShoppingListItemName.toLowerCase().includes(
+            searchQuery.toLowerCase()
+          ) ||
+          list.ShoppingListItemCategory.toLowerCase().includes(
+            searchQuery.toLowerCase()
+          )
+      );
+  
+      const sorted = [...filtered].sort((a, b) => {
+        if (sortBy === "name") {
+          return a.ShoppingListItemName.localeCompare(b.ShoppingListItemName);
+        } else {
+          return a.ShoppingListItemCategory.localeCompare(b.ShoppingListItemCategory);
+        }
+      });
+  
+      return sorted;
+    }, [list!.ShoppingListItems, searchQuery, sortBy]);
 
   const addItem = () => {
     dispatch(
@@ -140,12 +163,15 @@ export function ShoppingListDetail() {
     setItemQuantity(item.ShoppingListItemQuantity.toString());
     setItemCategory(item.ShoppingListItemCategory);
     setItemNotes(item.ShoppingListItemNotes);
+    setItemImage(item.ShoppingListitemImage);
     setIsEditDialogOpen(true);
   };
 
   const handleShareList = () => {
     // Mock share functionality
-    const shareUrl = `http://localhost:5174/listItems/${list!.ShoppingListId}`;
+    const shareUrl = `http://localhost:5174/sharerShoplist/${
+      list!.ShoppingListId
+    }/${encrypt(user.EmailAddress)}`;
     navigator.clipboard
       .writeText(shareUrl)
       .then(() => {
@@ -166,6 +192,16 @@ export function ShoppingListDetail() {
       />
 
       <div className="list-detail-container">
+        {/* Search and Controls */}
+        <SearchControls
+          placeHolder="Search Items..."
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          sortBy={sortBy as SortBy}
+          setSortBy={setSortBy}
+          onAddClick={() => setIsAddDialogOpen(true)}
+        />
+
         {/* Header */}
         <button className="back-button" onClick={() => navigate("/")}>
           <ArrowLeft />
@@ -191,7 +227,7 @@ export function ShoppingListDetail() {
         </div>
 
         {/* Items */}
-        {list!.ShoppingListItems.length === 0 ? (
+        {filteredAndSortedListitems.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-content">
               <div className="empty-icon">
@@ -211,7 +247,7 @@ export function ShoppingListDetail() {
           <>
             {/* Mobile Cards View */}
             <div className="mobile-view">
-              {list!.ShoppingListItems.map((item) => (
+              {filteredAndSortedListitems.map((item) => (
                 <div key={item.ShoppingListItemId} className="item-card">
                   <div className="item-card-header">
                     <div className="item-card-title-row">
@@ -224,11 +260,11 @@ export function ShoppingListDetail() {
                           {item.ShoppingListItemCategory}
                         </p>
                       </div>
-                      {/* {item.image && (
+                      {item.ShoppingListitemImage && (
                         <div className="item-image-placeholder">
                           <ImageIcon />
                         </div>
-                      )} */}
+                      )}
                     </div>
                   </div>
                   {item.ShoppingListItemNotes && (
@@ -276,15 +312,23 @@ export function ShoppingListDetail() {
                   </tr>
                 </thead>
                 <tbody>
-                  {list!.ShoppingListItems.map((item) => (
+                  {filteredAndSortedListitems.map((item) => (
                     <tr key={item.ShoppingListItemId}>
                       <td>
                         <div className="table-cell-content">
-                          {/* {item.image && (
+                          {item.ShoppingListitemImage && (
                             <div className="table-image">
-                              <ImageIcon />
+                              <img
+                                src={item.ShoppingListitemImage}
+                                alt={item.ShoppingListItemName}
+                                style={{
+                                  width: "30px",
+                                  height: "30px",
+                                  objectFit: "cover",
+                                }}
+                              />
                             </div>
-                          )} */}
+                          )}
                           {item.ShoppingListItemName}
                         </div>
                       </td>

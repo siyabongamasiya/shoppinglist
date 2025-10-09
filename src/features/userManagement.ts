@@ -3,6 +3,9 @@ import { User } from "../models/models";
 import axios from "axios";
 import { toast } from "sonner";
 import { generateUniqueId } from "../../utilities";
+import CryptoJS from "crypto-js";
+
+const SECRET_KEY = "mySuperSecretKey123";
 
 export interface UserState extends User {
   isLoading: boolean;
@@ -57,8 +60,11 @@ export const refreshUser = createAsyncThunk(
       const response = await axios.get("http://localhost:3000/users");
 
       const user: User = response.data.find(
-        (u: User) => u.EmailAddress === email && u.Password === password
+        (u: User) => {
+          return u.EmailAddress === email && decrypt(u.Password) === decrypt(password)
+        }
       );
+      
 
       if (!user) {
         return rejectWithValue("User not found or incorrect credentials");
@@ -84,7 +90,9 @@ export const updatePassword = createAsyncThunk(
   ) => {
     const user = getState() as { userManagement: UserState };
     // Validate current password
-    if (currentPassword !== user.userManagement.Password) {
+    if (currentPassword !== decrypt(user.userManagement.Password)) {
+      console.log(currentPassword)
+      console.log(decrypt(user.userManagement.Password))
       return rejectWithValue("Current password is incorrect");
     }
 
@@ -104,7 +112,7 @@ export const updatePassword = createAsyncThunk(
 
       const updatedUser = {
         ...currentUser,
-        Password: newPassword,
+        Password: encrypt(newPassword),
       };
 
       await axios.patch(
@@ -136,9 +144,12 @@ export const login = createAsyncThunk(
       toast.message("Logging in...");
       const response = await axios.get("http://localhost:3000/users");
 
-      const user: User = response.data.find(
-        (u: User) => u.EmailAddress === email && u.Password === password
-      );
+      const user: User = response.data.find((u: User) => {
+        return (
+          u.EmailAddress === email &&
+          decrypt(u.Password) === password
+        );
+      });
       if (!user) {
         return rejectWithValue("User not found or incorrect credentials");
       }
@@ -179,7 +190,7 @@ export const register = createAsyncThunk(
       const newUser: User = {
         id: generateUniqueId(),
         EmailAddress: email,
-        Password: password,
+        Password: encrypt(password),
         Name: name,
         Surname: surname,
         Cellnumber: cellnumber,
@@ -321,7 +332,7 @@ export const userManagement = createSlice({
         state.Cellnumber = action.payload.Cellnumber;
         state.isLoggedIn = true;
         state.shoppingLists = action.payload.shoppingLists;
-        saveToLocalStorage(state)
+        saveToLocalStorage(state);
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
@@ -344,6 +355,7 @@ export const userManagement = createSlice({
         state.Surname = action.payload.Surname;
         state.Cellnumber = action.payload.Cellnumber;
         state.shoppingLists = action.payload.shoppingLists;
+        saveToLocalStorage(state);
       })
       .addCase(refreshUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -376,11 +388,37 @@ export const userManagement = createSlice({
   },
 });
 
+export const encrypt = (text: string): string => {
+  try {
+    const ciphertext = CryptoJS.AES.encrypt(text, SECRET_KEY).toString();
+
+    return encodeURIComponent(ciphertext);
+  } catch (error) {
+    toast.error("Encryption failed");
+    return text;
+  }
+};
+
+
+export const decrypt = (encryptedText: string): string => {
+  try {
+    const decodedText = decodeURIComponent(encryptedText);
+
+    const bytes = CryptoJS.AES.decrypt(decodedText, SECRET_KEY);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+
+    return decrypted;
+  } catch (error) {
+    toast.error("Decryption failed");
+    return "";
+  }
+};
+
 const saveToLocalStorage = (state: UserState) => {
   localStorage.setItem("user", JSON.stringify(state));
 };
 export const clearLocalStorage = () => {
-  localStorage.clear()
+  localStorage.clear();
 };
 
 export const getUserFromLocalStorage = (): UserState | null => {
@@ -388,5 +426,11 @@ export const getUserFromLocalStorage = (): UserState | null => {
   return storedUser ? (JSON.parse(storedUser) as UserState) : null;
 };
 
-
 export default userManagement.reducer;
+
+
+
+
+
+
+

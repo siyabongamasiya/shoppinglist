@@ -13,6 +13,8 @@ import {
 import { store } from "../store";
 import { Provider } from "react-redux";
 import { Toaster } from "sonner";
+import { useAppSelector } from "../hooks";
+import { SharerShopListPage } from "./pages/SharerShoplistPage";
 
 export default function App() {
 
@@ -26,6 +28,8 @@ export default function App() {
   }
 
   function ProfileRoute() {
+    const user = useAppSelector((state) => state.userManagement)
+    
     const navigate = useNavigate();
     return (
       <ProfilePage
@@ -73,6 +77,7 @@ export default function App() {
           <Route path="/login" element={<LoginRoute />} />
           <Route path="/register" element={<RegisterRoute />} />
           <Route path="/listItems/:id" element={<ShoppingListDetailRoute />} />
+          <Route path="/sharerShopList/:id/:email" element={<SharerShopListPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

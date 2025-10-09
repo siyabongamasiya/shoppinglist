@@ -4,6 +4,7 @@ import "../styles/components/search-controls.css";
 export type SortBy = "name" | "category" | "date";
 
 export type Props = {
+  placeHolder: string;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
   sortBy: SortBy;
@@ -12,6 +13,7 @@ export type Props = {
 };
 
 export function SearchControls({
+  placeHolder,
   searchQuery,
   setSearchQuery,
   sortBy,
@@ -24,7 +26,7 @@ export function SearchControls({
         <Search className="search-icon" />
         <input
           type="search"
-          placeholder="Search lists..."
+          placeholder={placeHolder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-input"
@@ -37,16 +39,24 @@ export function SearchControls({
           onChange={(e) => setSortBy(e.target.value as SortBy)}
           className="form-input"
         >
-          <option value="date">Date Created</option>
+          {placeHolder === "Search Lists..." ? (
+            <option value="date">Date Created</option>
+          ) : (
+            ""
+          )}
           <option value="name">Name</option>
           <option value="category">Category</option>
         </select>
       </div>
 
-      <button onClick={onAddClick} className="btn">
-        <Plus />
-        Add New List
-      </button>
+      {placeHolder === "Search Lists..." ? (
+        <button onClick={onAddClick} className="btn">
+          <Plus />
+          Add New List
+        </button>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

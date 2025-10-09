@@ -3,7 +3,7 @@ import '../styles/Navigation.css';
 import type { User } from '../models/models';
 
 type NavigationProps = {
-  user: User;
+  user: User | null;
   onNavigateToHome: () => void;
   onNavigateToProfile?: () => void;
   onLogout: () => void;
@@ -11,7 +11,7 @@ type NavigationProps = {
 };
 
 export function Navigation({
-  user: _user,
+  user: user,
   onNavigateToHome,
   onLogout,
   onNavigateToProfile,

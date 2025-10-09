@@ -139,6 +139,7 @@ export function HomePage({ onNavigateToProfile }: HomePageProps) {
 
         {/* Search and Controls */}
         <SearchControls
+          placeHolder="Search Lists..."
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           sortBy={sortBy as SortBy}
