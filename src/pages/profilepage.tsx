@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigation } from "../components/Navigation";
 import { Edit, Lock } from "lucide-react";
 import { toast } from "sonner";
@@ -6,7 +6,13 @@ import "../styles/ProfilePage.css";
 import "../styles/HomePage.css";
 import type { User } from "../models/models";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { updatePassword, updateUserDetails } from "../features/userManagement";
+import {
+  getUserFromLocalStorage,
+  refreshUser,
+  updatePassword,
+  updateUserDetails,
+} from "../features/userManagement";
+import { useNavigate } from "react-router-dom";
 
 type ProfilePageProps = {
   onUpdateUser: (user: User) => void;
@@ -22,8 +28,9 @@ export function ProfilePage({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const user = useAppSelector((state) => state.userManagement);
+  let user = useAppSelector((state) => state.userManagement);
   const dispatch = useAppDispatch();
 
   // Edit profile state
@@ -36,6 +43,18 @@ export function ProfilePage({
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  //take back to home if refresh
+  if (getUserFromLocalStorage() === null) {
+    navigate("/");
+  } else {
+    user = getUserFromLocalStorage()!;
+    useEffect(() => {
+      dispatch(
+        refreshUser({ email: user.EmailAddress, password: user.Password })
+      );
+    }, []);
+  }
 
   const handleUpdateProfile = () => {
     if (!editName || !editSurname || !editEmail || !editCellNumber) {
@@ -72,11 +91,6 @@ export function ProfilePage({
       return;
     }
 
-    // email,
-    //   currentPassword,
-    //   newPassword,
-    //   confirmNewPassword,
-
     //update logic lana
     dispatch(
       updatePassword({
@@ -103,6 +117,7 @@ export function ProfilePage({
     <div className="profile-page">
       <Navigation
         user={user}
+        hasNavButtons={true}
         onNavigateToHome={onNavigateToHome}
         onLogout={onLogout}
         currentPage="profile"

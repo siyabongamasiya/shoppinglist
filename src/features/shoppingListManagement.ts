@@ -71,7 +71,7 @@ export const addList = createAsyncThunk(
 
       return updatedUser;
     } catch (error: any) {
-      toast.dismiss();
+      toast.dismiss();  
       toast.error(error.message || "Failed to add shopping list");
       return rejectWithValue(error.message || "Failed to add shopping list");
     }
