@@ -36,18 +36,6 @@ export function HomePage({ onNavigateToProfile }: HomePageProps) {
   let user = useAppSelector((state) => state.userManagement);
   const dispatch = useAppDispatch();
 
-  //take back to login if no user
-  if (getUserFromLocalStorage() === null) {
-    navigate("/login");
-  } else {
-    user = getUserFromLocalStorage()!;
-    useEffect(() => {
-      dispatch(
-        refreshUser({ email: user.EmailAddress, password: user.Password })
-      );
-    }, []);
-  }
-
   // Filter and sort lists
   const filteredAndSortedLists = useMemo(() => {
     let filtered = user.shoppingLists.filter(
@@ -122,6 +110,7 @@ export function HomePage({ onNavigateToProfile }: HomePageProps) {
     <div className="home-page">
       <Navigation
         user={user}
+        hasNavButtons={true}
         onNavigateToHome={() => {}}
         onNavigateToProfile={onNavigateToProfile}
         onLogout={() => {

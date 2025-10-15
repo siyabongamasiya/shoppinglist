@@ -103,5 +103,14 @@ export const sharerShoppingListManagement = createSlice({
   },
 });
 
+export const saveToLocalStorage = (state: SharerListState) => {
+  localStorage.setItem("sharerList", JSON.stringify(state));
+};
+
+export const getListFromLocalStorage = (): SharerListState | null => {
+  const storedList = localStorage.getItem("sharerList");
+  return storedList ? (JSON.parse(storedList) as SharerListState) : null;
+};
+
 export default sharerShoppingListManagement.reducer;
 

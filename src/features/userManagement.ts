@@ -59,12 +59,11 @@ export const refreshUser = createAsyncThunk(
     try {
       const response = await axios.get("http://localhost:3000/users");
 
-      const user: User = response.data.find(
-        (u: User) => {
-          return u.EmailAddress === email && decrypt(u.Password) === decrypt(password)
-        }
-      );
-      
+      const user: User = response.data.find((u: User) => {
+        return (
+          u.EmailAddress === email && decrypt(u.Password) === decrypt(password)
+        );
+      });
 
       if (!user) {
         return rejectWithValue("User not found or incorrect credentials");
@@ -91,8 +90,8 @@ export const updatePassword = createAsyncThunk(
     const user = getState() as { userManagement: UserState };
     // Validate current password
     if (currentPassword !== decrypt(user.userManagement.Password)) {
-      console.log(currentPassword)
-      console.log(decrypt(user.userManagement.Password))
+      console.log(currentPassword);
+      console.log(decrypt(user.userManagement.Password));
       return rejectWithValue("Current password is incorrect");
     }
 
@@ -145,10 +144,7 @@ export const login = createAsyncThunk(
       const response = await axios.get("http://localhost:3000/users");
 
       const user: User = response.data.find((u: User) => {
-        return (
-          u.EmailAddress === email &&
-          decrypt(u.Password) === password
-        );
+        return u.EmailAddress === email && decrypt(u.Password) === password;
       });
       if (!user) {
         return rejectWithValue("User not found or incorrect credentials");
@@ -399,7 +395,6 @@ export const encrypt = (text: string): string => {
   }
 };
 
-
 export const decrypt = (encryptedText: string): string => {
   try {
     const decodedText = decodeURIComponent(encryptedText);
@@ -427,10 +422,3 @@ export const getUserFromLocalStorage = (): UserState | null => {
 };
 
 export default userManagement.reducer;
-
-
-
-
-
-
-

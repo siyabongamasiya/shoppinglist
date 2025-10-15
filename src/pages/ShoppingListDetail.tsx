@@ -20,12 +20,17 @@ import {
   editListItem,
 } from "../features/shoppingListManagement";
 import { generateUniqueId } from "../../utilities";
-import { decrypt, encrypt, type UserState } from "../features/userManagement";
+import {
+  encrypt,
+  getUserFromLocalStorage,
+  refreshUser,
+  type UserState,
+} from "../features/userManagement";
 import { SearchControls, type SortBy } from "../components/SearchControls";
 
 export function ShoppingListDetail() {
   const dispatch = useAppDispatch();
-  const user: UserState = useAppSelector((state) => state.userManagement);
+  let user: UserState = useAppSelector((state) => state.userManagement);
 
   const navigate = useNavigate();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -43,28 +48,46 @@ export function ShoppingListDetail() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("name");
 
+  // useEffect(() => {
+  //   // If list is missing, go to home
+  //   if (!list) {
+  //     navigate("/");
+  //     return;
+  //   }
+
+  //   // If list exists, try restoring user
+  //   const user = getUserFromLocalStorage();
+  //   if (user) {
+  //     dispatch(
+  //       refreshUser({ email: user.EmailAddress, password: user.Password })
+  //     );
+  //   }
+  // }, [list, navigate, dispatch]);
+
   // Filter and sort lists
-    const filteredAndSortedListitems = useMemo(() => {
-      let filtered = list!.ShoppingListItems.filter(
-        (list) =>
-          list.ShoppingListItemName.toLowerCase().includes(
-            searchQuery.toLowerCase()
-          ) ||
-          list.ShoppingListItemCategory.toLowerCase().includes(
-            searchQuery.toLowerCase()
-          )
-      );
-  
-      const sorted = [...filtered].sort((a, b) => {
-        if (sortBy === "name") {
-          return a.ShoppingListItemName.localeCompare(b.ShoppingListItemName);
-        } else {
-          return a.ShoppingListItemCategory.localeCompare(b.ShoppingListItemCategory);
-        }
-      });
-  
-      return sorted;
-    }, [list!.ShoppingListItems, searchQuery, sortBy]);
+  const filteredAndSortedListitems = useMemo(() => {
+    let filtered = list!.ShoppingListItems.filter(
+      (list) =>
+        list.ShoppingListItemName.toLowerCase().includes(
+          searchQuery.toLowerCase()
+        ) ||
+        list.ShoppingListItemCategory.toLowerCase().includes(
+          searchQuery.toLowerCase()
+        )
+    );
+
+    const sorted = [...filtered].sort((a, b) => {
+      if (sortBy === "name") {
+        return a.ShoppingListItemName.localeCompare(b.ShoppingListItemName);
+      } else {
+        return a.ShoppingListItemCategory.localeCompare(
+          b.ShoppingListItemCategory
+        );
+      }
+    });
+
+    return sorted;
+  }, [list!.ShoppingListItems, searchQuery, sortBy]);
 
   const addItem = () => {
     dispatch(
@@ -186,6 +209,7 @@ export function ShoppingListDetail() {
     <div className="list-detail-page">
       <Navigation
         user={user}
+        hasNavButtons={true}
         onNavigateToHome={() => navigate("/")}
         onLogout={() => navigate("/login")}
         currentPage="list-detail"
