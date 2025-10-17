@@ -43,7 +43,7 @@ This is a **Shopping List** application built with **React** and **TypeScript**.
 
 1.  **Clone the repository:**
     ```sh
-    git clone <repository_url>
+    git clone https://github.com/siyabongamasiya/shoppinglist.git
     cd shoppinglist
     ```
 
