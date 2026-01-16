@@ -60,6 +60,7 @@ This is a **Shopping List** application built with **React** and **TypeScript**.
 To run the application in development mode, execute the following command:
 ```sh
 npm run dev
+---
 
 This will start the Vite development server, typically accessible at http://localhost:5173. 
 Build for Production:
