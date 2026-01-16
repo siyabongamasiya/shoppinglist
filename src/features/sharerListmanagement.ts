@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { ShoppingList, ShoppingListItem, User } from "../models/models";
+import type { ShoppingList, User } from "../models/models";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -112,4 +112,3 @@ export const getListFromLocalStorage = (): SharerListState | null => {
 };
 
 export default sharerShoppingListManagement.reducer;
-

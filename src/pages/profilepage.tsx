@@ -20,14 +20,9 @@ type ProfilePageProps = {
   onLogout: () => void;
 };
 
-export function ProfilePage({
-  onUpdateUser,
-  onNavigateToHome,
-  onLogout,
-}: ProfilePageProps) {
+export function ProfilePage({ onNavigateToHome, onLogout }: ProfilePageProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   let user = useAppSelector((state) => state.userManagement);
@@ -283,7 +278,7 @@ export function ProfilePage({
               <button
                 className="btn"
                 onClick={handleUpdateProfile}
-                disabled={isLoading}
+                disabled={user.isLoading}
               >
                 {user.isLoading ? "Updating..." : "Update Profile"}
               </button>

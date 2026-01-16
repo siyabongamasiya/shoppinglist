@@ -82,7 +82,7 @@ type ChartTooltipContentProps = {
     name: any,
     item: any,
     index: number,
-    itemPayload: any,
+    itemPayload: any
   ) => React.ReactNode;
   color?: string;
   nameKey?: string;
@@ -121,7 +121,11 @@ function ChartTooltipContent({
 
     if (labelFormatter) {
       return (
-        <div className={["chart-tooltip-label", labelClassName || ""].filter(Boolean).join(" ")}>
+        <div
+          className={["chart-tooltip-label", labelClassName || ""]
+            .filter(Boolean)
+            .join(" ")}
+        >
           {labelFormatter(value, payload)}
         </div>
       );
@@ -132,7 +136,11 @@ function ChartTooltipContent({
     }
 
     return (
-      <div className={["chart-tooltip-label", labelClassName || ""].filter(Boolean).join(" ")}>
+      <div
+        className={["chart-tooltip-label", labelClassName || ""]
+          .filter(Boolean)
+          .join(" ")}
+      >
         {value}
       </div>
     );
@@ -155,7 +163,9 @@ function ChartTooltipContent({
   const nestLabel = payloadArray.length === 1 && indicator !== "dot";
 
   return (
-    <div className={["chart-tooltip", className || ""].filter(Boolean).join(" ")}>
+    <div
+      className={["chart-tooltip", className || ""].filter(Boolean).join(" ")}
+    >
       {!nestLabel ? tooltipLabel : null}
       <div className="chart-tooltip-items">
         {payloadArray.map((item: any, index: number) => {
@@ -180,26 +190,34 @@ function ChartTooltipContent({
                             "--color-bg": indicatorColor,
                             "--color-border": indicatorColor,
                             height: indicator === "dot" ? 10 : undefined,
-                            width: indicator === "dot" ? 10 : indicator === "line" ? 4 : 0,
-                            border: indicator === "dashed" ? "1.5px dashed var(--color-border)" : undefined,
-                            background: indicator === "dashed" ? "transparent" : (indicatorColor as string),
+                            width:
+                              indicator === "dot"
+                                ? 10
+                                : indicator === "line"
+                                ? 4
+                                : 0,
+                            border:
+                              indicator === "dashed"
+                                ? "1.5px dashed var(--color-border)"
+                                : undefined,
+                            background:
+                              indicator === "dashed"
+                                ? "transparent"
+                                : (indicatorColor as string),
                           } as React.CSSProperties
                         }
                       />
                     )
                   )}
-                  <div className="chart-tooltip-item" style={{ justifyContent: "space-between", width: "100%" }}>
+                  <div
+                    className="chart-tooltip-item"
+                    style={{ justifyContent: "space-between", width: "100%" }}
+                  >
                     <div>
                       {nestLabel ? tooltipLabel : null}
-                      <span>
-                        {itemConfig?.label || item.name}
-                      </span>
+                      <span>{itemConfig?.label || item.name}</span>
                     </div>
-                    {item.value && (
-                      <span>
-                        {item.value.toLocaleString()}
-                      </span>
-                    )}
+                    {item.value && <span>{item.value.toLocaleString()}</span>}
                   </div>
                 </>
               )}
@@ -225,7 +243,6 @@ function ChartLegendContent({
   className,
   hideIcon = false,
   payload,
-  verticalAlign = "bottom",
   nameKey,
 }: ChartLegendContentProps) {
   const { config } = useChart();
@@ -236,10 +253,16 @@ function ChartLegendContent({
   }
 
   return (
-    <div className={["chart-legend", className || ""].filter(Boolean).join(" ")}>
+    <div
+      className={["chart-legend", className || ""].filter(Boolean).join(" ")}
+    >
       {legendArray.map((item: any) => {
         const key = `${nameKey || item.dataKey || "value"}`;
-        const itemConfig = getPayloadConfigFromPayload(config, item as any, key);
+        const itemConfig = getPayloadConfigFromPayload(
+          config,
+          item as any,
+          key
+        );
 
         return (
           <div key={item.value} className="chart-legend-item">
@@ -247,7 +270,12 @@ function ChartLegendContent({
               <itemConfig.icon />
             ) : (
               <div
-                style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: item.color }}
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: 2,
+                  backgroundColor: item.color,
+                }}
               />
             )}
             {itemConfig?.label}
@@ -262,7 +290,7 @@ function ChartLegendContent({
 function getPayloadConfigFromPayload(
   config: ChartConfig,
   payload: unknown,
-  key: string,
+  key: string
 ) {
   if (typeof payload !== "object" || payload === null) {
     return undefined;

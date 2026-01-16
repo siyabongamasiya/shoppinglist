@@ -1,4 +1,3 @@
-import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { Navigation } from "../components/Navigation";
@@ -18,9 +17,11 @@ export function SharerShopListPage() {
     (state) => state.sharerListManagement
   );
 
-  sharerShopListState.ShoppingListItems.length === 0 ? saveToLocalStorage(sharerShopListState) : "";
+  sharerShopListState.ShoppingListItems.length === 0
+    ? saveToLocalStorage(sharerShopListState)
+    : "";
 
-  if(sharerShopListState.ShoppingListItems.length === 0){
+  if (sharerShopListState.ShoppingListItems.length === 0) {
     sharerShopListState = getListFromLocalStorage()!;
   }
 
@@ -51,7 +52,9 @@ export function SharerShopListPage() {
         {/* Header */}
         <div className="list-detail-header">
           <div className="list-detail-info">
-            <h1>{sharerShopListState.ShoppingListName || "Shared Shopping List"}</h1>
+            <h1>
+              {sharerShopListState.ShoppingListName || "Shared Shopping List"}
+            </h1>
             <p>{sharerShopListState.ShoppingListcategory || "No category"}</p>
             <p className="list-date">
               {sharerShopListState.ShoppingListDate || "No date available"}

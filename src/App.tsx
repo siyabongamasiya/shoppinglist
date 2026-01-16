@@ -13,23 +13,15 @@ import {
 import { store } from "../store";
 import { Provider } from "react-redux";
 import { Toaster } from "sonner";
-import { useAppSelector } from "../hooks";
 import { SharerShopListPage } from "./pages/SharerShoplistPage";
 
 export default function App() {
-
   function HomeRoute() {
     const navigate = useNavigate();
-    return (
-      <HomePage
-        onNavigateToProfile={() => navigate("/profile")}
-      />
-    );
+    return <HomePage onNavigateToProfile={() => navigate("/profile")} />;
   }
 
   function ProfileRoute() {
-    const user = useAppSelector((state) => state.userManagement)
-    
     const navigate = useNavigate();
     return (
       <ProfilePage
@@ -61,23 +53,23 @@ export default function App() {
   }
 
   function ShoppingListDetailRoute() {
-    return (
-      <ShoppingListDetail
-      />
-    );
+    return <ShoppingListDetail />;
   }
 
   return (
     <Provider store={store}>
       <BrowserRouter>
-      <Toaster position="bottom-right"/>
+        <Toaster position="bottom-right" />
         <Routes>
           <Route path="/" element={<HomeRoute />} />
           <Route path="/profile" element={<ProfileRoute />} />
           <Route path="/login" element={<LoginRoute />} />
           <Route path="/register" element={<RegisterRoute />} />
           <Route path="/listItems/:id" element={<ShoppingListDetailRoute />} />
-          <Route path="/sharerShopList/:id/:email" element={<SharerShopListPage />} />
+          <Route
+            path="/sharerShopList/:id/:email"
+            element={<SharerShopListPage />}
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

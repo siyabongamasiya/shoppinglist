@@ -55,7 +55,7 @@ function Carousel({
       ...opts,
       axis: orientation === "horizontal" ? "x" : "y",
     },
-    plugins,
+    plugins
   );
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
@@ -84,7 +84,7 @@ function Carousel({
         scrollNext();
       }
     },
-    [scrollPrev, scrollNext],
+    [scrollPrev, scrollNext]
   );
 
   React.useEffect(() => {
@@ -133,7 +133,7 @@ function Carousel({
 }
 
 function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
-  const { carouselRef, orientation } = useCarousel();
+  const { carouselRef } = useCarousel();
 
   return (
     <div
@@ -141,14 +141,17 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
       className="carousel-content-viewport"
       data-slot="carousel-content"
     >
-      <div className={["carousel-content-inner", className || ""].filter(Boolean).join(" ")} {...props} />
+      <div
+        className={["carousel-content-inner", className || ""]
+          .filter(Boolean)
+          .join(" ")}
+        {...props}
+      />
     </div>
   );
 }
 
 function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
-  const { orientation } = useCarousel();
-
   return (
     <div
       role="group"
@@ -166,7 +169,7 @@ function CarouselPrevious({
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+  const { scrollPrev, canScrollPrev } = useCarousel();
 
   return (
     <Button
@@ -190,7 +193,7 @@ function CarouselNext({
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { orientation, scrollNext, canScrollNext } = useCarousel();
+  const { scrollNext, canScrollNext } = useCarousel();
 
   return (
     <Button

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Navigation } from "../components/Navigation";
 import { toast } from "sonner";
 import "../styles/HomePage.css";
@@ -10,12 +10,7 @@ import { EditListDialog } from "../components/EditListDialog";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { editList } from "../features/shoppingListManagement";
-import {
-  clearLocalStorage,
-  getUserFromLocalStorage,
-  login,
-  refreshUser,
-} from "../features/userManagement";
+import { clearLocalStorage } from "../features/userManagement";
 
 type HomePageProps = {
   onNavigateToProfile: () => void;
