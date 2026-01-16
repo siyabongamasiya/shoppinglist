@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Navigation } from "../components/Navigation";
 import {
   Plus,
@@ -20,12 +20,7 @@ import {
   editListItem,
 } from "../features/shoppingListManagement";
 import { generateUniqueId } from "../../utilities";
-import {
-  encrypt,
-  getUserFromLocalStorage,
-  refreshUser,
-  type UserState,
-} from "../features/userManagement";
+import { encrypt, type UserState } from "../features/userManagement";
 import { SearchControls, type SortBy } from "../components/SearchControls";
 
 export function ShoppingListDetail() {

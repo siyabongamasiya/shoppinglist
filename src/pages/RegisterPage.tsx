@@ -18,10 +18,7 @@ type RegisterPageProps = {
   onNavigateToLogin: () => void;
 };
 
-export function RegisterPage({
-  onRegister,
-  onNavigateToLogin,
-}: RegisterPageProps) {
+export function RegisterPage({ onNavigateToLogin }: RegisterPageProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

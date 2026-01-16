@@ -12,7 +12,6 @@ type NavigationProps = {
 };
 
 export function Navigation({
-  user: user,
   hasNavButtons,
   onNavigateToHome,
   onLogout,
