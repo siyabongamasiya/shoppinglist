@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { ShoppingList, ShoppingListItem, User } from "../models/models";
 import axios from "axios";
 import { toast } from "sonner";
-import { refreshUser, type RefreshArgs } from "./userManagement";
 
 // Define the initial state using that type
 export interface SharerListState extends ShoppingList {
