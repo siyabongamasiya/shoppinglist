@@ -1,6 +1,6 @@
-import { HomePage } from "./pages/HomePage";
+import { HomePage } from "./pages/homepage";
 import { LoginPage } from "./pages/LoginPage";
-import { ProfilePage } from "./pages/ProfilePage";
+import { ProfilePage } from "./pages/profilepage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { ShoppingListDetail } from "./pages/ShoppingListDetail";
 import {
