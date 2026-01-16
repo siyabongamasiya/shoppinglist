@@ -2,8 +2,6 @@
 
 A modern, feature-rich shopping list management application built with React, TypeScript, and Vite. Organize your shopping lists, manage items, and share lists with others seamlessly.
 
-🌐 **Live Demo**: [https://shoppinglist-kq2s.onrender.com](https://shoppinglist-kq2s.onrender.com)
-
 ## Features
 
 - 🛒 **Create & Manage Lists** - Organize items by category (Groceries, Hardware, etc.)

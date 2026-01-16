@@ -112,6 +112,32 @@
           ]
         }
       ]
+    },
+    {
+      "id": "id-1768559211365-8315",
+      "EmailAddress": "aa@gmail.com",
+      "Password": "U2FsdGVkX1%2FFurc0sI0RjuaMUOjcJQkdWrdMrOtDv%2Bc%3D",
+      "Name": "ded",
+      "Surname": "sss",
+      "Cellnumber": "35354",
+      "shoppingLists": []
+    },
+    {
+      "id": "id-1768559590343-1814",
+      "EmailAddress": "siya@gmail.com",
+      "Password": "U2FsdGVkX19DSI459KnBTESIcPX2LVR57CaxTZ8P2E0%3D",
+      "Name": "siya",
+      "Surname": "khan",
+      "Cellnumber": "123456",
+      "shoppingLists": [
+        {
+          "ShoppingListId": "id-1768559623858-170",
+          "ShoppingListName": "weekly",
+          "ShoppingListDate": "2026-01-16",
+          "ShoppingListcategory": "groceries",
+          "ShoppingListItems": []
+        }
+      ]
     }
   ]
 }
