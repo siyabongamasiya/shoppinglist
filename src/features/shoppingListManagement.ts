@@ -3,6 +3,7 @@ import type { ShoppingList, ShoppingListItem, User } from "../models/models";
 import axios from "axios";
 import { toast } from "sonner";
 import { refreshUser, type RefreshArgs } from "./userManagement";
+import { API_BASE_URL } from "../config/apiBaseUrl";
 
 // Define the initial state using that type
 const initialState: ShoppingList = {
@@ -30,7 +31,7 @@ export const addList = createAsyncThunk(
   "shoppingListManagement/addList",
   async (
     { email, shoppingList, onShoplistAdded }: AddListArgs,
-    { dispatch,rejectWithValue }
+    { dispatch, rejectWithValue },
   ) => {
     try {
       toast.dismiss();
@@ -38,7 +39,7 @@ export const addList = createAsyncThunk(
 
       // 1. Fetch the user
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${email}`,
       );
       const user: User = response.data[0];
 
@@ -55,7 +56,7 @@ export const addList = createAsyncThunk(
       };
 
       // 3. PATCH the updated user
-      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+      await axios.patch(`${API_BASE_URL}/users/${user.id}`, updatedUser);
 
       toast.dismiss();
       toast.success("Shopping list added successfully");
@@ -66,16 +67,16 @@ export const addList = createAsyncThunk(
         refreshUser({
           email: updatedUser.EmailAddress,
           password: updatedUser.Password,
-        })
+        }),
       );
 
       return updatedUser;
     } catch (error: any) {
-      toast.dismiss();  
+      toast.dismiss();
       toast.error(error.message || "Failed to add shopping list");
       return rejectWithValue(error.message || "Failed to add shopping list");
     }
-  }
+  },
 );
 
 export const deleteList = createAsyncThunk(
@@ -83,12 +84,12 @@ export const deleteList = createAsyncThunk(
   async (
     {
       email,
-      shoppingListId
+      shoppingListId,
     }: {
       email: string;
       shoppingListId: string;
     },
-    { dispatch, rejectWithValue }
+    { dispatch, rejectWithValue },
   ) => {
     try {
       toast.dismiss();
@@ -96,7 +97,7 @@ export const deleteList = createAsyncThunk(
 
       // 1. Fetch user by email
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${email}`,
       );
       const user: User = response.data[0];
 
@@ -107,7 +108,7 @@ export const deleteList = createAsyncThunk(
 
       // 2. Remove the targeted shopping list
       const updatedShoppingLists = user.shoppingLists.filter(
-        (list) => list.ShoppingListId !== shoppingListId
+        (list) => list.ShoppingListId !== shoppingListId,
       );
 
       const updatedUser = {
@@ -116,14 +117,14 @@ export const deleteList = createAsyncThunk(
       };
 
       // 3. Update user data on backend
-      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+      await axios.patch(`${API_BASE_URL}/users/${user.id}`, updatedUser);
 
       // 4. Refresh Redux user state
       dispatch(
         refreshUser({
           email: updatedUser.EmailAddress,
           password: updatedUser.Password,
-        })
+        }),
       );
 
       toast.dismiss();
@@ -135,9 +136,8 @@ export const deleteList = createAsyncThunk(
       toast.error(error.message || "Failed to delete shopping list");
       return rejectWithValue(error.message || "Failed to delete shopping list");
     }
-  }
+  },
 );
-
 
 export const editList = createAsyncThunk(
   "shoppingListManagement/editList",
@@ -151,14 +151,14 @@ export const editList = createAsyncThunk(
       shoppingListId: string;
       updatedListData: Partial<ShoppingList>;
     },
-    { dispatch, rejectWithValue }
+    { dispatch, rejectWithValue },
   ) => {
     try {
       toast.dismiss();
       toast.loading("Updating shopping list...");
 
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${email}`,
       );
       const user: User = response.data[0];
 
@@ -170,18 +170,18 @@ export const editList = createAsyncThunk(
       const updatedShoppingLists = user.shoppingLists.map((list) =>
         list.ShoppingListId === shoppingListId
           ? { ...list, ...updatedListData }
-          : list
+          : list,
       );
 
       const updatedUser = { ...user, shoppingLists: updatedShoppingLists };
 
-      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+      await axios.patch(`${API_BASE_URL}/users/${user.id}`, updatedUser);
 
       toast.dismiss();
       toast.success("Shopping list updated successfully");
 
       dispatch(
-        refreshUser({ email: user.EmailAddress, password: user.Password })
+        refreshUser({ email: user.EmailAddress, password: user.Password }),
       );
 
       return updatedUser;
@@ -190,7 +190,7 @@ export const editList = createAsyncThunk(
       toast.error(error.message || "Failed to update shopping list");
       return rejectWithValue(error.message || "Failed to update shopping list");
     }
-  }
+  },
 );
 
 export const editListItem = createAsyncThunk(
@@ -207,7 +207,7 @@ export const editListItem = createAsyncThunk(
       shoppingListItemId: string;
       updatedItemData: Partial<ShoppingListItem>;
     },
-    { dispatch, rejectWithValue }
+    { dispatch, rejectWithValue },
   ) => {
     try {
       toast.dismiss();
@@ -215,7 +215,7 @@ export const editListItem = createAsyncThunk(
 
       // Fetch the user
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${email}`,
       );
       const user: User = response.data[0];
 
@@ -231,7 +231,7 @@ export const editListItem = createAsyncThunk(
         const updatedItems = list.ShoppingListItems.map((item) =>
           item.ShoppingListItemId === shoppingListItemId
             ? { ...item, ...updatedItemData }
-            : item
+            : item,
         );
 
         return { ...list, ShoppingListItems: updatedItems };
@@ -240,7 +240,7 @@ export const editListItem = createAsyncThunk(
       const updatedUser = { ...user, shoppingLists: updatedShoppingLists };
 
       // PATCH the user with updated data
-      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+      await axios.patch(`${API_BASE_URL}/users/${user.id}`, updatedUser);
 
       toast.dismiss();
       toast.success("Shopping list item updated successfully");
@@ -250,7 +250,7 @@ export const editListItem = createAsyncThunk(
         refreshUser({
           email: user.EmailAddress,
           password: user.Password,
-        })
+        }),
       );
 
       return updatedUser;
@@ -258,10 +258,10 @@ export const editListItem = createAsyncThunk(
       toast.dismiss();
       toast.error(error.message || "Failed to update shopping list item");
       return rejectWithValue(
-        error.message || "Failed to update shopping list item"
+        error.message || "Failed to update shopping list item",
       );
     }
-  }
+  },
 );
 
 export const deleteListItem = createAsyncThunk(
@@ -278,7 +278,7 @@ export const deleteListItem = createAsyncThunk(
       shoppingListItemId: string;
       onItemDeleted?: () => void;
     },
-    { dispatch, rejectWithValue }
+    { dispatch, rejectWithValue },
   ) => {
     try {
       toast.dismiss();
@@ -286,7 +286,7 @@ export const deleteListItem = createAsyncThunk(
 
       // Fetch the user
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${email}`,
       );
       const user: User = response.data[0];
 
@@ -300,7 +300,7 @@ export const deleteListItem = createAsyncThunk(
         if (list.ShoppingListId !== shoppingListId) return list;
 
         const filteredItems = list.ShoppingListItems.filter(
-          (item) => item.ShoppingListItemId !== shoppingListItemId
+          (item) => item.ShoppingListItemId !== shoppingListItemId,
         );
 
         return { ...list, ShoppingListItems: filteredItems };
@@ -309,7 +309,7 @@ export const deleteListItem = createAsyncThunk(
       const updatedUser = { ...user, shoppingLists: updatedShoppingLists };
 
       //  PATCH updated user
-      await axios.patch(`http://localhost:3000/users/${user.id}`, updatedUser);
+      await axios.patch(`${API_BASE_URL}/users/${user.id}`, updatedUser);
 
       toast.dismiss();
       toast.success("Item deleted successfully");
@@ -322,7 +322,7 @@ export const deleteListItem = createAsyncThunk(
         refreshUser({
           email: user.EmailAddress,
           password: user.Password,
-        })
+        }),
       );
 
       return updatedUser;
@@ -331,21 +331,14 @@ export const deleteListItem = createAsyncThunk(
       toast.error(error.message || "Failed to delete item");
       return rejectWithValue(error.message || "Failed to delete item");
     }
-  }
+  },
 );
-
-
-
 
 export const addListItem = createAsyncThunk(
   "userManagement/addListItem",
   async (
-    {
-      email,
-      shoppingListId,
-      shoppingListItem,
-    }: AddListItemArgs,
-    { dispatch, rejectWithValue }
+    { email, shoppingListId, shoppingListItem }: AddListItemArgs,
+    { dispatch, rejectWithValue },
   ) => {
     try {
       toast.dismiss();
@@ -353,10 +346,10 @@ export const addListItem = createAsyncThunk(
 
       // 1. Fetch user by email
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${email}`,
       );
       const user: User = response.data.find(
-        (u: User) => u.EmailAddress === email
+        (u: User) => u.EmailAddress === email,
       );
 
       if (!user) {
@@ -373,14 +366,14 @@ export const addListItem = createAsyncThunk(
                 shoppingListItem,
               ],
             }
-          : list
+          : list,
       );
 
       // 3. Update the user object
       const updatedUser = { ...user, shoppingLists: updatedShoppingLists };
 
       // 4. Save changes to DB
-      await axios.put(`http://localhost:3000/users/${user.id}`, updatedUser);
+      await axios.put(`${API_BASE_URL}/users/${user.id}`, updatedUser);
 
       toast.dismiss();
       toast.success("Item added successfully");
@@ -388,7 +381,7 @@ export const addListItem = createAsyncThunk(
         refreshUser({
           email: user.EmailAddress,
           password: user.Password,
-        } as RefreshArgs)
+        } as RefreshArgs),
       );
 
       return updatedUser;
@@ -396,7 +389,7 @@ export const addListItem = createAsyncThunk(
       toast.dismiss();
       return rejectWithValue(error.message || "Failed to add list item");
     }
-  }
+  },
 );
 
 export const shoppingListManagent = createSlice({

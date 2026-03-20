@@ -29,6 +29,7 @@ export function HomePage({ onNavigateToProfile }: HomePageProps) {
   const navigate = useNavigate();
 
   let user = useAppSelector((state) => state.userManagement);
+  
   const dispatch = useAppDispatch();
 
   // Filter and sort lists

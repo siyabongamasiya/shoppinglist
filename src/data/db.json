@@ -138,6 +138,88 @@
           "ShoppingListItems": []
         }
       ]
+    },
+    {
+      "id": "id-1773341080593-2236",
+      "EmailAddress": "parker@gmail.com",
+      "Password": "U2FsdGVkX1%2F%2FuqcO6Eljo2dewDb8ox2fGDF8C9%2Fwqu0%3D",
+      "Name": "pieter",
+      "Surname": "parker",
+      "Cellnumber": "0764564567",
+      "shoppingLists": [
+        {
+          "ShoppingListId": "id-1773341112481-7182",
+          "ShoppingListName": "Groceries",
+          "ShoppingListDate": "2026-03-12",
+          "ShoppingListcategory": "food",
+          "ShoppingListItems": [
+            {
+              "ShoppingListItemId": "id-1773341149782-6303",
+              "ShoppingListItemName": "milk",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "dairy",
+              "ShoppingListItemNotes": "check expiry date",
+              "ShoppingListitemImage": ""
+            }
+          ]
+        },
+        {
+          "ShoppingListId": "id-1773341197317-5972",
+          "ShoppingListName": "Supplies",
+          "ShoppingListDate": "2026-03-12",
+          "ShoppingListcategory": "hardware",
+          "ShoppingListItems": [
+            {
+              "ShoppingListItemId": "id-1773341219128-1006",
+              "ShoppingListItemName": "hammer",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "nailing",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            }
+          ]
+        },
+        {
+          "ShoppingListId": "id-1773341508890-8360",
+          "ShoppingListName": "some list",
+          "ShoppingListDate": "2026-03-12",
+          "ShoppingListcategory": "some cat",
+          "ShoppingListItems": []
+        }
+      ]
+    },
+    {
+      "id": "id-1773392084316-1076",
+      "EmailAddress": "zack@gmail.com",
+      "Password": "U2FsdGVkX1%2FTyw8fvZ0cYgnI4OulM4pNogx5xVhPCpg%3D",
+      "Name": "zack",
+      "Surname": "mlab",
+      "Cellnumber": "0711234567",
+      "shoppingLists": [
+        {
+          "ShoppingListId": "id-1773392107160-5778",
+          "ShoppingListName": "Groceries",
+          "ShoppingListDate": "2026-03-13",
+          "ShoppingListcategory": "Food stuff",
+          "ShoppingListItems": [
+            {
+              "ShoppingListItemId": "id-1773392207808-9467",
+              "ShoppingListItemName": "milk",
+              "ShoppingListItemQuantity": "1",
+              "ShoppingListItemCategory": "dairy",
+              "ShoppingListItemNotes": "",
+              "ShoppingListitemImage": ""
+            }
+          ]
+        },
+        {
+          "ShoppingListId": "id-1773392136533-7647",
+          "ShoppingListName": "Hardware stuff",
+          "ShoppingListDate": "2026-03-13",
+          "ShoppingListcategory": "hammers",
+          "ShoppingListItems": []
+        }
+      ]
     }
   ]
 }

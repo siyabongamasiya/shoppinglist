@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { generateUniqueId } from "../../utilities";
 import CryptoJS from "crypto-js";
+import { API_BASE_URL } from "../config/apiBaseUrl";
 
 const SECRET_KEY = "mySuperSecretKey123";
 
@@ -57,7 +58,7 @@ export const refreshUser = createAsyncThunk(
   "userManagement/refreshUser",
   async ({ email, password }: RefreshArgs, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:3000/users");
+      const response = await axios.get(`${API_BASE_URL}/users`);
 
       const user: User = response.data.find((u: User) => {
         return (
@@ -72,7 +73,7 @@ export const refreshUser = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch user");
     }
-  }
+  },
 );
 
 export const updatePassword = createAsyncThunk(
@@ -85,7 +86,7 @@ export const updatePassword = createAsyncThunk(
       confirmNewPassword,
       onPasswordUpdated,
     }: UpdatePasswordArgs,
-    { dispatch, getState, rejectWithValue }
+    { dispatch, getState, rejectWithValue },
   ) => {
     const user = getState() as { userManagement: UserState };
     // Validate current password
@@ -105,7 +106,7 @@ export const updatePassword = createAsyncThunk(
       toast.loading("Updating password...");
 
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${email}`,
       );
       const currentUser: User = response.data[0];
 
@@ -114,16 +115,13 @@ export const updatePassword = createAsyncThunk(
         Password: encrypt(newPassword),
       };
 
-      await axios.patch(
-        `http://localhost:3000/users/${currentUser.id}`,
-        updatedUser
-      );
+      await axios.patch(`${API_BASE_URL}/users/${currentUser.id}`, updatedUser);
 
       dispatch(
         refreshUser({
           email: updatedUser.EmailAddress,
           password: updatedUser.Password,
-        })
+        }),
       );
       onPasswordUpdated();
       toast.dismiss();
@@ -132,7 +130,7 @@ export const updatePassword = createAsyncThunk(
     } catch (error) {
       return rejectWithValue("Failed to update password");
     }
-  }
+  },
 );
 
 export const login = createAsyncThunk(
@@ -141,7 +139,7 @@ export const login = createAsyncThunk(
     try {
       toast.dismiss();
       toast.message("Logging in...");
-      const response = await axios.get("http://localhost:3000/users");
+      const response = await axios.get(`${API_BASE_URL}/users`);
 
       const user: User = response.data.find((u: User) => {
         return u.EmailAddress === email && decrypt(u.Password) === password;
@@ -156,14 +154,14 @@ export const login = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch user");
     }
-  }
+  },
 );
 
 export const register = createAsyncThunk(
   "userManagement/register",
   async (
     { email, password, name, surname, cellnumber, onNavigate }: RegisterArgs,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       // Dismiss previous toasts
@@ -171,9 +169,9 @@ export const register = createAsyncThunk(
       toast.loading("Registering user...");
 
       // Fetch existing users
-      const response = await axios.get("http://localhost:3000/users");
+      const response = await axios.get(`${API_BASE_URL}/users`);
       const existingUser: User = response.data.find(
-        (u: User) => u.EmailAddress === email
+        (u: User) => u.EmailAddress === email,
       );
 
       if (existingUser) {
@@ -194,7 +192,7 @@ export const register = createAsyncThunk(
       };
 
       // POST new user to JSON Server
-      await axios.post("http://localhost:3000/users", newUser);
+      await axios.post(`${API_BASE_URL}/users`, newUser);
 
       toast.dismiss();
       toast.success("Registered successfully");
@@ -206,7 +204,7 @@ export const register = createAsyncThunk(
       toast.error(error.message || "Failed to register user");
       return rejectWithValue(error.message || "Failed to register user");
     }
-  }
+  },
 );
 
 export const updateUserDetails = createAsyncThunk(
@@ -225,10 +223,13 @@ export const updateUserDetails = createAsyncThunk(
       cellNumber: string;
       onProfileUpdated?: () => void;
     },
-    { dispatch, rejectWithValue }
+    { dispatch, getState, rejectWithValue },
   ) => {
     try {
-      if (!email) {
+      const state = getState() as { userManagement: UserState };
+      const loggedInEmail = state.userManagement.EmailAddress;
+
+      if (!loggedInEmail) {
         return rejectWithValue("No logged-in user found");
       }
 
@@ -237,7 +238,7 @@ export const updateUserDetails = createAsyncThunk(
 
       // Fetch the latest user data from backend
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${loggedInEmail}`,
       );
       const currentUser: User = response.data[0];
 
@@ -256,10 +257,7 @@ export const updateUserDetails = createAsyncThunk(
       };
 
       // Update on backend
-      await axios.patch(
-        `http://localhost:3000/users/${currentUser.id}`,
-        updatedUser
-      );
+      await axios.patch(`${API_BASE_URL}/users/${currentUser.id}`, updatedUser);
 
       toast.dismiss();
       toast.success("Profile updated successfully");
@@ -272,7 +270,7 @@ export const updateUserDetails = createAsyncThunk(
         refreshUser({
           email: updatedUser.EmailAddress,
           password: updatedUser.Password,
-        })
+        }),
       );
       return updatedUser;
     } catch (error: any) {
@@ -280,7 +278,7 @@ export const updateUserDetails = createAsyncThunk(
       toast.error(error.message || "Failed to update profile");
       return rejectWithValue(error.message || "Failed to update profile");
     }
-  }
+  },
 );
 
 export const userManagement = createSlice({

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { ShoppingList, User } from "../models/models";
 import axios from "axios";
 import { toast } from "sonner";
+import { API_BASE_URL } from "../config/apiBaseUrl";
 
 // Define the initial state using that type
 export interface SharerListState extends ShoppingList {
@@ -28,7 +29,7 @@ export const getSharerList = createAsyncThunk(
       email: string | undefined;
       shoppingListId: string | undefined;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       toast.dismiss();
@@ -36,7 +37,7 @@ export const getSharerList = createAsyncThunk(
 
       // Fetch the user who shared the list
       const response = await axios.get(
-        `http://localhost:3000/users?EmailAddress=${email}`
+        `${API_BASE_URL}/users?EmailAddress=${email}`,
       );
 
       const sharer: User = response.data[0];
@@ -49,7 +50,7 @@ export const getSharerList = createAsyncThunk(
 
       // Find the shared shopping list by ID
       const sharedList = sharer.shoppingLists.find(
-        (list: ShoppingList) => list.ShoppingListId === shoppingListId
+        (list: ShoppingList) => list.ShoppingListId === shoppingListId,
       );
 
       if (!sharedList) {
@@ -68,7 +69,7 @@ export const getSharerList = createAsyncThunk(
       toast.error(error.message || "Failed to fetch shared list");
       return rejectWithValue(error.message || "Failed to fetch shared list");
     }
-  }
+  },
 );
 
 export const sharerShoppingListManagement = createSlice({

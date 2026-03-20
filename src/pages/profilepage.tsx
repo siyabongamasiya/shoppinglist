@@ -25,7 +25,7 @@ export function ProfilePage({ onNavigateToHome, onLogout }: ProfilePageProps) {
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const navigate = useNavigate();
 
-  let user = useAppSelector((state) => state.userManagement);
+  const user = useAppSelector((state) => state.userManagement);
   const dispatch = useAppDispatch();
 
   // Edit profile state
@@ -39,17 +39,20 @@ export function ProfilePage({ onNavigateToHome, onLogout }: ProfilePageProps) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
-  //take back to home if refresh
-  if (getUserFromLocalStorage() === null) {
-    navigate("/");
-  } else {
-    user = getUserFromLocalStorage()!;
-    useEffect(() => {
-      dispatch(
-        refreshUser({ email: user.EmailAddress, password: user.Password })
-      );
-    }, []);
-  }
+  useEffect(() => {
+    const storedUser = getUserFromLocalStorage();
+    if (storedUser === null) {
+      navigate("/");
+      return;
+    }
+
+    dispatch(
+      refreshUser({
+        email: storedUser.EmailAddress,
+        password: storedUser.Password,
+      }),
+    );
+  }, [dispatch, navigate]);
 
   const handleUpdateProfile = () => {
     if (!editName || !editSurname || !editEmail || !editCellNumber) {
@@ -66,7 +69,7 @@ export function ProfilePage({ onNavigateToHome, onLogout }: ProfilePageProps) {
         onProfileUpdated: () => {
           setIsEditDialogOpen(false);
         },
-      })
+      }),
     );
   };
 
@@ -96,7 +99,7 @@ export function ProfilePage({ onNavigateToHome, onLogout }: ProfilePageProps) {
         onPasswordUpdated: () => {
           setIsPasswordDialogOpen(false);
         },
-      })
+      }),
     );
   };
 
