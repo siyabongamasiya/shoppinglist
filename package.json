@@ -8,8 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "api": "node server.cjs",
-    "start": "node server.cjs"
+    "api": "node server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.1",
