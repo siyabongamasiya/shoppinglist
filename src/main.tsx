@@ -4,7 +4,6 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { store } from "../store.ts";
 import "sonner/dist/styles.css";
-import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
